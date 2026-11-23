@@ -206,3 +206,51 @@ flights between hospitals. Primary source: matternet.com/our-system-aircraft.
 - Users can change V0, H_FG, CD and the extra margins. The derived volumes update immediately.
 - Flight time is the straight-line distance divided by V0. Take-off, climb, descent and handling
   are not included, and the UI says so.
+
+## 2026-11-23 – Phase 2 (MVP)
+
+### D18 Analysis rules
+
+- **What is checked:** the operational volume (flight geography + contingency volume, D17) around
+  the direct line. Vertically it reaches from the ground up to H_CV, because take-off and landing
+  pass through every height.
+- **Per zone:**
+
+  | Result                  | When                                                                                               |
+  | ----------------------- | -------------------------------------------------------------------------------------------------- |
+  | Conflict                | Horizontal and vertical overlap. Touching a limit counts as overlap ("from 120 m" includes 120 m). |
+  | Passes below / above    | Horizontal overlap, but no height overlap, e.g. below CTR BALE.                                    |
+  | Ground risk buffer only | Only the ground risk buffer touches the zone. A note, not a conflict.                              |
+
+- **Verdict:**
+  - "exemption needed" if any zone conflicts
+  - otherwise "no zone conflict", with any passed zones listed
+- **Authorities:** the result lists every authority of a conflicting zone once, with contact details.
+- **AMSL limits:** these need the terrain height. It comes from the geo.admin profile service
+  (LV95 only), and only when such a zone is touched. The comparison is conservative: the corridor
+  is as tall as possible, the zone as large as possible. Until the terrain is known, the zone
+  counts as a conflict.
+- **Border:** if any part of the operational volume lies outside Switzerland (swissBOUNDARIES3D,
+  clipped to the map area), the result warns that zones abroad were not checked (D8).
+- **Weight:** zone rules for drones above 250 g are assumed to apply (reference aircraft 21 kg).
+  The restriction text is shown verbatim.
+- **Temporary zones:** included and labelled with their validity period. The check does not filter
+  by date.
+
+### D19 Routing host and pairs
+
+- Requests go to `api.heigit.org/openrouteservice/…`. According to the ORS FAQ, accounts moved to
+  HeiGIT in 2025. A third-party guide (unverified) says `api.openrouteservice.org` will be retired.
+- Routes are computed for every **ordered** pair, because one-way streets make A→B and B→A differ.
+  17 sites give 272 requests, about 8 minutes at < 40 requests per minute.
+- A geometry file is loaded only for the selected pair. All 272 files together are 152 KB gzipped.
+
+### D20 Sites
+
+- 13 hospitals from the Basel-Stadt open data set (all categories, because all send samples).
+- KSBL Bruderholz and Liestal from the swisstopo gazetteer.
+- Two labs, each verified on the company's own site:
+  - Viollier laboratory centre, Allschwil (staffed 24/7)
+  - Unilabs Basel (cytology and pathology)
+- Positions of the labs come from the geo.admin address search.
+- No open data set of medical labs was found.

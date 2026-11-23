@@ -28,28 +28,30 @@ estimated flight time with driving time on the road.
 ## Current status
 
 - Phase 0 (spike) is done; see `docs/phase-0-spike.md`.
-- Phase 1 (setup) is done on branch `phase-1-setup`.
-- **Waiting for the owner's OK before Phase 2.**
-- Hosting is **GitHub Pages** without a custom domain for now (D15). There is no Vercel and no
-  server code.
+- Phase 1 (setup) is merged into `main` (repo: github.com/TomLuxor/basilink).
+- Phase 2 (MVP features 1–7) is done on branch `phase-2-mvp`.
+- **Waiting for the owner's OK before Phase 3.**
+- Hosting: D15 says GitHub Pages, but the owner has also deployed the project on Vercel.
+  _Open question to the owner: which one is primary?_ There is no server code either way.
 - Open owner tasks:
-  - create an OpenRouteService API key (HeiGIT account)
-  - create a public GitHub repo and add the remote
-  - enable Pages with source "GitHub Actions"
+  - enable Pages (or drop the Pages workflow if Vercel is primary)
   - add the repo secret `ORS_API_KEY`
   - confirm the ORS terms
+- `.env.local` holds `ORS_API_KEY=…`. Never print its content.
 
 ## Commands
 
-| Command                | Purpose                          |
-| ---------------------- | -------------------------------- |
-| `npm run dev`          | Start the dev server             |
-| `npm run build`        | Type check and build             |
-| `npm test`             | Run Vitest                       |
-| `npm run lint`         | ESLint                           |
-| `npm run format:check` | Prettier check                   |
-| `npm run typecheck`    | vue-tsc                          |
-| `npm run data:zones`   | Refresh `public/data/` from FOCA |
+| Command                | Purpose                                              |
+| ---------------------- | ---------------------------------------------------- |
+| `npm run dev`          | Start the dev server                                 |
+| `npm run build`        | Type check and build                                 |
+| `npm test`             | Run Vitest                                           |
+| `npm run lint`         | ESLint                                               |
+| `npm run format:check` | Prettier check                                       |
+| `npm run typecheck`    | vue-tsc                                              |
+| `npm run data:zones`   | Refresh `public/data/` from FOCA                     |
+| `npm run data:routes`  | Driving routes via ORS (`-- --missing` to fill gaps) |
+| `npm run data:border`  | Swiss border around Basel                            |
 
 On Windows, run Vitest from a terminal whose path starts with an upper-case drive letter (`D:\`).
 A lower-case `d:\` makes every test fail with "reading 'config'" (vitest#5251).
