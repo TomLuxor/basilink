@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { ZoneProperties } from '@/types/zone'
-import { formatDistance, formatDuration, formatZoneHeights } from './format'
+import { formatDistance, formatDuration, formatHeightRange } from './format'
 
 describe('formatDistance', () => {
   it('uses metres below 1 km and kilometres above', () => {
@@ -18,7 +18,7 @@ describe('formatDuration', () => {
   })
 })
 
-describe('formatZoneHeights', () => {
+describe('formatHeightRange', () => {
   const zone = (overrides: Partial<ZoneProperties>) =>
     ({
       lowerLimitM: 0,
@@ -28,16 +28,15 @@ describe('formatZoneHeights', () => {
       ...overrides,
     }) as ZoneProperties
 
-  it('describes ground-based and elevated zones', () => {
-    expect(formatZoneHeights(zone({}))).toBe('from the ground, no upper limit')
-    expect(formatZoneHeights(zone({ upperLimitM: 150 }))).toBe(
-      'from the ground, up to 150 m above ground',
-    )
-    expect(formatZoneHeights(zone({ lowerLimitM: 120 }))).toBe(
-      'from 120 m above ground, no upper limit',
-    )
-    expect(formatZoneHeights(zone({ upperLimitM: 600, upperReference: 'AMSL' }))).toBe(
-      'from the ground, up to 600 m above sea level',
+  it('shows ground-based and elevated zones compactly', () => {
+    expect(formatHeightRange(zone({}))).toBe('ground – no limit')
+    expect(formatHeightRange(zone({ upperLimitM: 150 }))).toBe('ground – 150 m')
+    expect(formatHeightRange(zone({ lowerLimitM: 120 }))).toBe('120 m – no limit')
+  })
+
+  it('marks limits above sea level', () => {
+    expect(formatHeightRange(zone({ upperLimitM: 600, upperReference: 'AMSL' }))).toBe(
+      'ground – 600 m a.s.l.',
     )
   })
 })

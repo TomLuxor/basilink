@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { Drone, Info } from '@lucide/vue'
 import BaseMap from '@/components/BaseMap.vue'
 import BasemapSwitcher from '@/components/BasemapSwitcher.vue'
 import DataSources from '@/components/DataSources.vue'
@@ -27,17 +28,19 @@ const zonesVisible = ref(true)
     class="grid min-h-dvh bg-white text-slate-900 md:grid-cols-[26rem_1fr] md:grid-rows-[auto_1fr]"
   >
     <section aria-labelledby="app-title" class="space-y-4 p-4 md:border-r md:border-slate-200">
-      <header>
-        <h1 id="app-title" class="text-xl font-bold">Basilink</h1>
-        <p class="text-sm text-slate-700">Drone corridors for lab samples in the Basel region</p>
+      <header class="flex items-center gap-3">
+        <span class="rounded-lg bg-teal-700 p-1.5 text-white">
+          <Drone class="size-6" />
+        </span>
+        <div>
+          <h1 id="app-title" class="text-xl leading-tight font-bold">Basilink</h1>
+          <p class="text-sm text-slate-600">Drone corridors for lab samples in Basel</p>
+        </div>
       </header>
 
-      <p
-        role="note"
-        class="rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-950"
-      >
-        <strong>Pre-check only.</strong> Basilink does not replace an authorisation from FOCA or any
-        other competent authority. Temporary restrictions (DABS/NOTAM) are not included.
+      <p role="note" class="flex items-center gap-2 text-sm text-amber-900">
+        <Info class="size-4 shrink-0" />
+        <span><strong>Pre-check only</strong>, not an authorisation by FOCA.</span>
       </p>
 
       <PairSelect
@@ -66,8 +69,9 @@ const zonesVisible = ref(true)
         :route="check.routeGeometry.value"
         @select-site="check.selectFromMap"
       />
-      <div class="absolute top-3 left-3">
+      <div class="absolute top-3 left-3 flex flex-col items-start gap-2">
         <BasemapSwitcher v-model="basemap" />
+        <MapLegend v-model:zones-visible="zonesVisible" />
       </div>
     </section>
 
@@ -77,7 +81,6 @@ const zonesVisible = ref(true)
         :from="check.from.value"
         :to="check.to.value"
         :route-summary="check.routeSummary.value"
-        :route-index="check.routeIndex.value"
         :terrain-error="check.terrainError.value"
         :load-error="check.loadError.value"
       />
@@ -87,8 +90,6 @@ const zonesVisible = ref(true)
         :volumes="check.volumes.value"
         @reset="check.resetParameters"
       />
-
-      <MapLegend v-model:zones-visible="zonesVisible" />
 
       <SiteList
         :sites="check.sites"

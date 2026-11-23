@@ -318,3 +318,25 @@ Supersedes D15. The owner connected the repository to Vercel (Hobby plan).
   browser.
 - Both update workflows run `npm test` before they commit new data. A broken update fails the
   workflow and never reaches the site.
+
+## 2026-11-23 – UI cleanup
+
+### D25 Show, don't describe
+
+The owner asked for a cleaner UI: not everything has to be text, and not every detail has to be
+explained. The panel was about 5,000 px long on a desktop; the core (pair, verdict, times, zones)
+now fits on one screen.
+
+- **Visuals instead of sentences:** the verdict is a badge with an icon, drone vs. car are two bars
+  in the map colours, zones are compact rows (category colour, height range, status badge), and
+  the checked volume is an SVG cross-section instead of a table with explanations.
+- **Details on demand:** restriction texts, ground risk buffer zones, the assumptions and the site
+  list open with native `<details>` elements. The legend and the zone switch moved onto the map.
+- **Short copy:** one-line disclaimer, short labels and hints. The reasons behind the defaults stay
+  in this log (D17) and are linked from the app through the SORA and Matternet links.
+- **Still accessible:** every visual has a text equivalent (screen reader text, `aria-label` on
+  the cross-section), status badges combine colour, icon and word, and axe-core reports no
+  violations in the four checked states (D23).
+- **Icons:** [`@lucide/vue`](https://lucide.dev) (ISC licence), pinned to an exact version. Only
+  the imported icons end up in the bundle (about 5 KB gzipped). Icons without a label are
+  hidden from screen readers by the library.

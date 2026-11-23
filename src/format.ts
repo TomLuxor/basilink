@@ -14,21 +14,20 @@ export function formatDuration(seconds: number): string {
   return `${Math.floor(minutes / 60)} h ${minutes % 60} min`
 }
 
-function formatLimit(metres: number, reference: 'AGL' | 'AMSL'): string {
-  return `${Math.round(metres)} m ${reference === 'AGL' ? 'above ground' : 'above sea level'}`
-}
-
-/** Vertical extent of a zone in words, e.g. "from 120 m above ground, no upper limit". */
-export function formatZoneHeights(zone: ZoneProperties): string {
-  const upper =
-    zone.upperLimitM === null
-      ? 'no upper limit'
-      : `up to ${formatLimit(zone.upperLimitM, zone.upperReference)}`
+/**
+ * Vertical extent of a zone, e.g. "ground – no limit" or "120 m – no limit". Heights are above
+ * ground unless marked "a.s.l." (above sea level).
+ */
+export function formatHeightRange(zone: ZoneProperties): string {
+  const limit = (metres: number, reference: 'AGL' | 'AMSL') =>
+    `${Math.round(metres)} m${reference === 'AMSL' ? ' a.s.l.' : ''}`
   const lower =
     zone.lowerLimitM === 0 && zone.lowerReference === 'AGL'
-      ? 'from the ground'
-      : `from ${formatLimit(zone.lowerLimitM, zone.lowerReference)}`
-  return `${lower}, ${upper}`
+      ? 'ground'
+      : limit(zone.lowerLimitM, zone.lowerReference)
+  const upper =
+    zone.upperLimitM === null ? 'no limit' : limit(zone.upperLimitM, zone.upperReference)
+  return `${lower} – ${upper}`
 }
 
 /** e.g. "20 Nov 2026" */
