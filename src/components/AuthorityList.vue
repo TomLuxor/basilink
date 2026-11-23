@@ -11,7 +11,7 @@ const linkClass =
 
 <template>
   <section aria-labelledby="authorities-title" class="space-y-2">
-    <h3 id="authorities-title" class="text-sm font-semibold">Ask for an exemption</h3>
+    <h3 id="authorities-title" class="text-sm font-semibold">Where to apply for an exemption</h3>
     <ul class="space-y-3">
       <li v-for="authority in authorities" :key="authority.name" class="text-sm">
         <p class="font-medium">

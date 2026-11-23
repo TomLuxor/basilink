@@ -59,7 +59,7 @@ leave Switzerland.
    12:00, 17:30 and 22:00, asked live from Mapbox.
 6. Switch the map to **3D** to see the corridor and the zones around it from the side, with
    heights drawn three times taller.
-7. **All pairs** rates all 136 site pairs at once as a traffic-light matrix: red needs an
+7. **Exemption overview** rates all 136 site pairs at once as a traffic-light matrix: red needs an
    exemption, amber leaves Switzerland, green has no zone conflict. A click opens the pair.
 
 All assumptions can be changed in the panel. Their sources are documented in

@@ -370,7 +370,8 @@ Replaces the stretch goal "DE/FR zones".
   long; at true scale the 5 m gap below the control zone would be invisible. The legend says so.
 - No terrain model: all zone limits around Basel are above ground, so a flat ground keeps the
   heights in the right relation and saves another data source. Zones with limits above sea level
-  are left out of the 3D view; zones without an upper limit end at 300 m.
+  are left out of the 3D view. Zones are cut 50 m above the checked volume: drawn up to 300 m
+  (×3), the zones without an upper limit hid the city and the gap below the control zone.
 - The 3D view adds no information that the result panel lacks. It is a visual aid, and the text
   stays the reference for screen readers.
 
