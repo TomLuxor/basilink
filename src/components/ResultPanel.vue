@@ -69,6 +69,17 @@ const comparison = computed(() => {
     : `Driving is about ${formatDuration(-difference)} faster.`
 })
 
+/**
+ * One sentence for screen readers whenever the result changes. It lives in an element that is
+ * always rendered, because a live region that appears together with its content is often not
+ * announced.
+ */
+const announcement = computed(() => {
+  if (!props.analysis || !props.from || !props.to) return ''
+  const road = props.routeSummary ? `, road ${formatDuration(props.routeSummary.durationS)}` : ''
+  return `${verdict.value.title}: ${props.from.name} to ${props.to.name}. Drone ${formatDuration(props.analysis.flightTimeS)}${road}.`
+})
+
 const RELATION_LABELS: Record<ZoneRelation, string> = {
   conflict: 'Conflict',
   'passes-below': 'Passes below',
@@ -86,6 +97,7 @@ const RELATION_STYLES: Record<ZoneRelation, string> = {
 <template>
   <section aria-labelledby="result-title" class="space-y-4">
     <h2 id="result-title" class="text-lg font-semibold">Result</h2>
+    <p class="sr-only" aria-live="polite">{{ announcement }}</p>
 
     <p v-if="loadError" role="alert" class="rounded-md border border-red-700 bg-red-50 p-3 text-sm">
       {{ loadError }}
@@ -95,8 +107,7 @@ const RELATION_STYLES: Record<ZoneRelation, string> = {
     </p>
 
     <template v-else>
-      <!-- Short summary, announced by screen readers whenever the result changes. -->
-      <div aria-live="polite" aria-atomic="true" class="space-y-3">
+      <div class="space-y-3">
         <div :class="['rounded-md border-l-4 p-3', verdict.style]">
           <p class="font-semibold">{{ verdict.title }}: {{ from.name }} → {{ to.name }}</p>
           <p class="text-sm">{{ verdict.text }}</p>
@@ -201,7 +212,13 @@ const RELATION_STYLES: Record<ZoneRelation, string> = {
               <a v-if="authority.phone" :href="`tel:${authority.phone}`" class="underline">{{
                 authority.phone
               }}</a>
-              <a v-if="authority.url" :href="authority.url" class="underline">Website</a>
+              <a
+                v-if="authority.url"
+                :href="authority.url"
+                :aria-label="`Website of ${authority.name}`"
+                class="underline"
+                >Website</a
+              >
             </p>
           </li>
         </ul>

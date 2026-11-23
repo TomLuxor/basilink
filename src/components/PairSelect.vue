@@ -29,7 +29,7 @@ const valueOf = (event: Event) => (event.target as HTMLSelectElement).value || n
           {{ field.label }}
           <select
             :value="field.value ?? ''"
-            class="w-full min-w-0 rounded-md border border-slate-400 bg-white px-2 py-1.5 text-base font-normal focus-visible:outline-2 focus-visible:outline-sky-600"
+            class="w-full min-w-0 rounded-md border border-slate-500 bg-white px-2 py-1.5 text-base font-normal focus-visible:outline-2 focus-visible:outline-sky-600"
             @change="
               field.id === 'from'
                 ? emit('setFrom', valueOf($event))
@@ -52,7 +52,7 @@ const valueOf = (event: Event) => (event.target as HTMLSelectElement).value || n
       </div>
       <button
         type="button"
-        class="rounded-md border border-slate-400 bg-white px-3 py-1.5 text-sm font-medium hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-sky-600 disabled:opacity-50"
+        class="rounded-md border border-slate-500 bg-white px-3 py-1.5 text-sm font-medium hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-sky-600 disabled:opacity-50"
         :disabled="!fromId && !toId"
         aria-label="Swap start and destination"
         title="Swap start and destination"
