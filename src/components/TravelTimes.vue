@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * Drone vs. car as two bars in the colours of the map, so the difference shows at a glance.
- * "By time of day" adds the car with typical traffic, asked live from Mapbox when opened (D29).
+ * "Car by time of day" adds typical traffic, asked live from Mapbox when opened (D29).
  */
 import { computed } from 'vue'
 import { Car, Clock, Drone } from '@lucide/vue'

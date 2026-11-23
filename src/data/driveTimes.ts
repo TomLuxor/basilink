@@ -1,7 +1,7 @@
 /**
  * Driving times with typical traffic (docs/decisions.md, D29). Unlike the routes, they are not
  * pre-computed: Mapbox forbids storing its results, so the Vercel Function api/drive-times.ts
- * asks Mapbox live whenever someone opens "By time of day".
+ * asks Mapbox live whenever someone opens "Car by time of day".
  *
  * Shared between the app and the function, so keep it free of browser APIs.
  */

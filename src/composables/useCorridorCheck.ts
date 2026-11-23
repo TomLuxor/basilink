@@ -180,7 +180,7 @@ export function useCorridorCheck() {
     }
   })
 
-  // --- Driving times with typical traffic: asked live, only while "By time of day" is open ---
+  // --- Driving times with typical traffic: asked live, only while "Car by time of day" is open ---
   const trafficOpen = ref(false)
   /** Only the current pair is kept: Mapbox forbids storing its results (D29). */
   const trafficResult = shallowRef<{ key: string; times: DriveTimes } | null>(null)
