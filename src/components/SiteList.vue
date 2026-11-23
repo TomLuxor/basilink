@@ -21,7 +21,7 @@ const buttonClass =
       class="flex cursor-pointer list-none items-center gap-2 rounded-lg px-3 py-2 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-sky-600 [&::-webkit-details-marker]:hidden"
     >
       <MapPin class="size-4 text-slate-600" />
-      <span class="font-semibold">All sites</span>
+      <span class="font-semibold">Hospitals and labs</span>
       <span class="text-sm text-slate-600">{{ sites.length }}</span>
       <ChevronDown
         class="ml-auto size-4 text-slate-500 transition-transform group-open:rotate-180 motion-reduce:transition-none"
