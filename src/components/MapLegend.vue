@@ -21,7 +21,7 @@ const corridorItems = [
 
 <template>
   <section aria-labelledby="legend-title" class="space-y-2 text-sm">
-    <h2 id="legend-title" class="text-lg font-semibold">Map</h2>
+    <h2 id="legend-title" class="text-lg font-semibold">Map legend</h2>
     <label class="flex items-center gap-2 font-medium">
       <input v-model="zonesVisible" type="checkbox" class="size-4 accent-slate-800" />
       Show drone restriction zones (FOCA)

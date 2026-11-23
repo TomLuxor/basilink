@@ -278,3 +278,40 @@ Supersedes D15. The owner connected the repository to Vercel (Hobby plan).
 - The Vercel docs do not say whether a deploy hook skips the commit author check. _To verify at
   the first data commit by the bot._ Without the secret, the workflow only warns, and the new data
   goes live with the next deployment.
+
+## 2026-11-23 – Phase 3
+
+### D22 Layout: one source order for all screens
+
+- The source order is the reading order on a phone: pair selection, map, result, details. On wide
+  screens a CSS grid moves the map into its own column, where it stays in view (`sticky`) while
+  the page scrolls. Visual order and focus order stay close on both layouts, without CSS `order`.
+- Before, the map came after the whole panel on phones, below the long site list.
+- On narrow screens the page scrolls past the map. MapLibre's cooperative gestures (two fingers
+  move the map, one finger scrolls the page) prevent a scroll trap. On wide screens they are off.
+- On narrow maps the attribution is MapLibre's expandable button, so it does not cover the scale
+  bar. All attributions are also listed in the panel.
+
+### D23 Accessibility checks
+
+- axe-core runs as a one-off check in headless Chrome (WCAG 2.1 A and AA plus best practices), in
+  four states: empty, with a result, with an invalid assumption, at phone width. It is not a
+  project dependency; the result and the fixes are recorded here and in the README.
+- Fixes from the review:
+  - The live region is always rendered and holds one sentence. A region inserted together with
+    its content is often not announced.
+  - Invalid assumptions get a text error (WCAG 3.3.1), linked with `aria-describedby`.
+  - Control borders use `slate-500` (4.8:1) instead of `slate-400` (2.6:1), for WCAG 1.4.11.
+  - Unique landmark names: MapLibre names its canvas region "Map", so the legend heading became
+    "Map legend".
+- Open: a test with real screen readers (NVDA, VoiceOver).
+
+### D24 Tests guard the data updates
+
+- `src/data/data.test.ts` checks that the generated files fit the curated sites: a route for every
+  ordered pair, zones matching their metadata.
+- `src/composables/useCorridorCheck.test.ts` drives the app state with the real data files through
+  a fake `fetch` (no network), so the whole pipeline from files to verdict is covered without a
+  browser.
+- Both update workflows run `npm test` before they commit new data. A broken update fails the
+  workflow and never reaches the site.

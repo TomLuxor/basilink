@@ -11,7 +11,7 @@ const groups = [
 ] as const
 
 const buttonClass =
-  'rounded border px-2 py-1 text-xs font-medium focus-visible:outline-2 focus-visible:outline-sky-600 aria-pressed:border-slate-900 aria-pressed:bg-slate-900 aria-pressed:text-white border-slate-400 bg-white hover:bg-slate-50'
+  'rounded border px-2 py-1 text-xs font-medium focus-visible:outline-2 focus-visible:outline-sky-600 aria-pressed:border-slate-900 aria-pressed:bg-slate-900 aria-pressed:text-white border-slate-500 bg-white hover:bg-slate-50'
 </script>
 
 <template>

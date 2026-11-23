@@ -8,8 +8,13 @@ Aviation (FOCA/BAZL). It also compares the estimated flight time with the drivin
 > **Pre-check only.** Basilink does not replace an authorisation from FOCA or any other competent
 > authority. Temporary restrictions (DABS/NOTAM) are not included.
 
-Status: Phase 2 (MVP) is complete: corridor check, flight vs. road time, map and text results.
-Phase 3 (accessibility review, responsive polish, docs, deployment) follows.
+**Live:** [basilink.vercel.app](https://basilink.vercel.app)
+
+![Basilink on a desktop screen: the panel on the left says "Exemption needed" for the corridor from University Hospital Basel to the Viollier laboratory, with drone and road times; the map on the right shows the corridor, the road route and the restriction zones.](docs/screenshots/desktop.webp)
+
+Status: the MVP is complete and deployed. The stretch goals are not built yet: a 3D view, a
+traffic-light matrix of all pairs, zones in Germany and France, and traffic-dependent driving
+times.
 
 ## How the check works
 
@@ -31,6 +36,41 @@ Phase 3 (accessibility review, responsive polish, docs, deployment) follows.
 
 All assumptions can be changed in the panel. Their sources are documented in
 [docs/decisions.md](docs/decisions.md) (D17, D18).
+
+## Accessibility and mobile use
+
+<img src="docs/screenshots/mobile.webp" alt="Basilink on a phone: start and destination fields, below them the map with the corridor." width="240" align="right">
+
+The target is WCAG 2.1 level AA.
+
+- **The map is optional.** Every result is also text: verdict, times, zones and authorities.
+  Sites can be chosen in two native selects or in the site list, not only by clicking the map.
+- **Keyboard and screen readers:** native controls with visible focus, headings and labelled
+  regions. A short summary is announced whenever the result changes. Invalid assumptions get a
+  text error, not only a red border.
+- **Phones:** the map follows directly after the pair selection. On narrow screens one finger
+  scrolls the page and two fingers move the map, so the map does not trap the scroll. Nothing
+  scrolls sideways down to a width of 320 px. Map animations respect "reduce motion".
+
+How it was checked: [axe-core](https://github.com/dequelabs/axe-core) 4.14 (rules for WCAG 2.1 A
+and AA plus best practices) in headless Chrome, in four states: empty, with a result, with an
+invalid assumption, and at phone width. It reports no violations. Tab order and focus were walked
+through by script. Not done yet: a test with real screen readers (NVDA, VoiceOver).
+
+<br clear="right">
+
+## Tests
+
+`npm test` runs the unit tests with Vitest:
+
+- the analysis: LV95 conversion, SORA volumes, corridor geometry, vertical limits, verdicts;
+- formatting, flight parameters and the data scripts (zone transform, route parsing);
+- the generated data: every ordered site pair has a route, zones match their metadata;
+- the app state end to end, with the real data files and no network, for example
+  USB → Viollier needs an exemption because of the airport zone.
+
+CI runs lint, format check, type check, tests and build on every push to `main` and every pull
+request. The data update workflows run the tests before they commit new data.
 
 ## Getting started
 
@@ -90,13 +130,14 @@ src/data/          curated sites, route file names, data loading
 src/map/           MapLibre overlay layers
 src/types/         shared data types (also used by scripts/)
 public/data/       generated data: zones, border, routes (do not edit by hand)
-docs/              spike report and decision log
+docs/              spike report, decision log, screenshots
 ```
 
 ## Documentation
 
-- [docs/phase-0-spike.md](docs/phase-0-spike.md): verified data sources, limits and risks
+- [DATA_SOURCES.md](DATA_SOURCES.md): every data source, its terms, processing and refresh
 - [docs/decisions.md](docs/decisions.md): decisions and their reasons
+- [docs/phase-0-spike.md](docs/phase-0-spike.md): verified data sources, limits and risks
 
 ## Troubleshooting
 
@@ -108,5 +149,5 @@ itself twice. Open the terminal in `D:\…` (upper case) and run the tests again
 ## Data sources and licenses
 
 Drone restriction zones: © FOCA (Opendata BY). Base map, imagery, border and terrain: © swisstopo.
-Routes: © openrouteservice.org by HeiGIT, map data © OpenStreetMap contributors. A full
-`DATA_SOURCES.md` follows in Phase 3.
+Routes: © openrouteservice.org by HeiGIT, map data © OpenStreetMap contributors. Details are in
+[DATA_SOURCES.md](DATA_SOURCES.md).

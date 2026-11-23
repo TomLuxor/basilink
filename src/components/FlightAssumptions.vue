@@ -3,11 +3,14 @@
  * The flight assumptions as an editable form, with the source of every default and the
  * volumes that follow from them (JARUS SORA 2.5 Annex A, see docs/decisions.md, D17).
  */
+import { computed } from 'vue'
 import { SORA_STANDARD_VALUES, type FlightVolumes } from '@/analysis/sora'
 import {
+  DEFAULT_FLIGHT_PARAMETERS,
   HEIGHT_LIMIT_M,
   PARAMETER_LIMITS,
   REFERENCE_AIRCRAFT,
+  sanitizeParameters,
   type FlightParameters,
 } from '@/config/flight'
 
@@ -67,6 +70,12 @@ function update(key: keyof FlightParameters, event: Event) {
   }
 }
 
+/** The values the analysis actually uses: invalid fields are replaced by their default. */
+const effective = computed(() => sanitizeParameters(parameters.value))
+const isInvalid = (key: keyof FlightParameters) => effective.value[key] !== parameters.value[key]
+const describedBy = (key: keyof FlightParameters) =>
+  isInvalid(key) ? `param-${key}-error param-${key}-hint` : `param-${key}-hint`
+
 const s = SORA_STANDARD_VALUES
 </script>
 
@@ -75,7 +84,7 @@ const s = SORA_STANDARD_VALUES
     <summary class="cursor-pointer font-semibold">
       Flight assumptions
       <span class="font-normal text-slate-700">
-        ({{ parameters.cruiseSpeedKmh }} km/h, {{ parameters.flightAltitudeM }} m above ground)
+        ({{ effective.cruiseSpeedKmh }} km/h, {{ effective.flightAltitudeM }} m above ground)
       </span>
     </summary>
 
@@ -99,10 +108,20 @@ const s = SORA_STANDARD_VALUES
           :max="PARAMETER_LIMITS[field.key].max"
           :step="field.step"
           :value="parameters[field.key]"
-          :aria-describedby="`param-${field.key}-hint`"
-          class="w-32 rounded-md border border-slate-400 px-2 py-1 focus-visible:outline-2 focus-visible:outline-sky-600 invalid:border-red-700"
+          :aria-invalid="isInvalid(field.key)"
+          :aria-describedby="describedBy(field.key)"
+          class="w-32 rounded-md border border-slate-500 px-2 py-1 focus-visible:outline-2 focus-visible:outline-sky-600 aria-invalid:border-2 aria-invalid:border-red-700"
           @input="update(field.key, $event)"
         />
+        <p
+          v-if="isInvalid(field.key)"
+          :id="`param-${field.key}-error`"
+          class="text-sm font-medium text-red-700"
+        >
+          Enter a number from {{ PARAMETER_LIMITS[field.key].min }} to
+          {{ PARAMETER_LIMITS[field.key].max }}. Until then, the default of
+          {{ DEFAULT_FLIGHT_PARAMETERS[field.key] }} {{ field.unit }} is used.
+        </p>
         <p :id="`param-${field.key}-hint`" class="text-xs text-slate-600">{{ field.hint }}</p>
       </div>
 
@@ -130,7 +149,7 @@ const s = SORA_STANDARD_VALUES
       </p>
       <button
         type="button"
-        class="rounded-md border border-slate-400 bg-white px-3 py-1.5 text-sm font-medium hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-sky-600"
+        class="rounded-md border border-slate-500 bg-white px-3 py-1.5 text-sm font-medium hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-sky-600"
         @click="emit('reset')"
       >
         Reset to defaults

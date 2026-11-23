@@ -37,6 +37,16 @@ let map: Map | null = null
 
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
+// Below the `md` breakpoint the page scrolls past the map (see App.vue). There, one finger must
+// scroll the page and two fingers move the map ("cooperative gestures"), or the map traps the
+// scroll. On wide screens the map has its own column and reacts to every gesture.
+const narrowScreen = window.matchMedia('(max-width: 47.99rem)')
+function updateGestures() {
+  if (!map) return
+  if (narrowScreen.matches) map.cooperativeGestures.enable()
+  else map.cooperativeGestures.disable()
+}
+
 /** Draws all overlays from the current props. Safe to call before the style has loaded. */
 function render() {
   if (!map?.getSource('basilink-zones')) return
@@ -63,8 +73,10 @@ onMounted(() => {
       bounds: REGION_BBOX,
       fitBoundsOptions: { padding: 16 },
       maxBounds: MAP_MAX_BOUNDS,
+      cooperativeGestures: narrowScreen.matches,
+      // Without `compact`, MapLibre shows the full line on wide maps and an expandable button on
+      // narrow ones, where the line would cover the scale bar.
       attributionControl: {
-        compact: false,
         customAttribution:
           'Zones © FOCA · Routes © openrouteservice.org by HeiGIT, OSM contributors',
       },
@@ -76,6 +88,7 @@ onMounted(() => {
       'The map cannot be displayed in this browser (WebGL 2 is required). All results are also available as text.'
     return
   }
+  narrowScreen.addEventListener('change', updateGestures)
   map.addControl(new NavigationControl({ showCompass: false }), 'top-right')
   map.addControl(new ScaleControl({ unit: 'metric' }), 'bottom-left')
   map.on('error', (event) => console.warn('Map error:', event.error))
@@ -106,6 +119,7 @@ watch(
 watch(() => [props.fromId, props.toId], fitToPair)
 
 onBeforeUnmount(() => {
+  narrowScreen.removeEventListener('change', updateGestures)
   map?.remove()
   map = null
 })
@@ -113,15 +127,12 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="relative h-full w-full">
-    <div
-      ref="container"
-      class="h-full w-full"
-      role="region"
-      aria-label="Map of the Basel region"
-      aria-describedby="map-keyboard-hint"
-    />
+    <!-- MapLibre gives its canvas the role "region" and the name "Map". The landmark around it
+         is the map section in App.vue, which refers to the hint below. -->
+    <div ref="container" class="h-full w-full" />
     <p id="map-keyboard-hint" class="sr-only">
-      Sites can also be chosen with the keyboard in the site list next to the map.
+      Sites can also be chosen with the keyboard: in the start and destination fields or in the site
+      list.
     </p>
     <p
       v-if="errorMessage"
