@@ -2,7 +2,12 @@
 /** Map overlay: switch for the restriction zones and the legend of everything drawn on the map. */
 import { ChevronDown, Layers } from '@lucide/vue'
 import { ZONE_CATEGORIES, ZONE_CATEGORY_ORDER } from '@/config/zoneCategories'
-import { CORRIDOR_COLOURS, SITE_COLOURS } from '@/map/overlays'
+import {
+  CORRIDOR_COLOURS,
+  SITE_COLOURS,
+  VERTICAL_EXAGGERATION,
+  ZONE_3D_CEILING_M,
+} from '@/map/overlays'
 
 const zonesVisible = defineModel<boolean>('zonesVisible', { required: true })
 
@@ -73,6 +78,10 @@ const corridorItems = [
           {{ item.label }}
         </li>
       </ul>
+      <p class="border-t border-slate-200 pt-2 text-xs text-slate-600">
+        3D: heights ×{{ VERTICAL_EXAGGERATION }}. Zones around the corridor only; without an upper
+        limit they end at {{ ZONE_3D_CEILING_M }} m.
+      </p>
     </div>
   </details>
 </template>

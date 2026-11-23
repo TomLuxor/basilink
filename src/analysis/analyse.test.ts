@@ -167,6 +167,19 @@ describe('analyseCorridor', () => {
     expect(analyse([]).leavesSwitzerland).toBeNull()
   })
 
+  it('cuts the zones in the operational volume to the ground risk area for the 3D view', () => {
+    // A zone much larger than the corridor, and one only the ground risk buffer touches.
+    const large = zone('large', rectangle(-5000, -5000, 7000, 5000))
+    const bufferOnly = zone('buffer', rectangle(800, 120, 900, 200))
+    const slices = analyse([large, bufferOnly]).zoneSlices
+    expect(slices.map((s) => s.zone.id)).toEqual(['large'])
+
+    // The slice ends where the ground risk area ends: 165.7 m beside the line, not 5 km.
+    const ring = slices[0]!.geometry.type === 'Polygon' ? slices[0]!.geometry.coordinates[0]! : []
+    const north = toWgs84([START[0], START[1] + 170])[1]
+    for (const [, lat] of ring) expect(lat).toBeLessThan(north)
+  })
+
   it('returns the part of the corridor outside Switzerland for the map', () => {
     const inside = prepareArea({
       type: 'Polygon',

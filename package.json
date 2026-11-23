@@ -24,6 +24,7 @@
     "@turf/boolean-intersects": "^7.4.0",
     "@turf/boolean-within": "^7.4.0",
     "@turf/difference": "^7.4.0",
+    "@turf/intersect": "^7.4.0",
     "maplibre-gl": "^6.19.0",
     "proj4": "^2.23.0",
     "vue": "^3.5.42"

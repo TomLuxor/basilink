@@ -8,7 +8,7 @@ import type { FlightVolumes } from '@/analysis/sora'
 import { HEIGHT_LIMIT_M } from '@/config/flight'
 import { CORRIDOR_COLOURS } from '@/map/overlays'
 
-const props = defineProps<{ volumes: FlightVolumes; altitudeM: number }>()
+const props = defineProps<{ volumes: FlightVolumes }>()
 
 // Drawing area in SVG units.
 const WIDTH = 320
@@ -26,7 +26,7 @@ const shape = computed(() => {
     volumeWidth: 2 * half,
     volumeY: GROUND_Y - v.contingencyTopM * yScale,
     bufferWidth: v.groundRiskBufferM * xScale,
-    flightY: GROUND_Y - props.altitudeM * yScale,
+    flightY: GROUND_Y - v.flightGeographyTopM * yScale,
     limitY: GROUND_Y - HEIGHT_LIMIT_M * yScale,
   }
 })
@@ -35,7 +35,7 @@ const metres = (value: number) => `${Math.round(value)} m`
 
 const description = computed(() => {
   const v = props.volumes
-  return `Cross-section of the checked volume: ${v.corridorHalfWidthM.toFixed(1)} m on each side of the line, from the ground up to ${v.contingencyTopM.toFixed(1)} m. Flight height ${props.altitudeM} m. Ground risk buffer: a further ${v.groundRiskBufferM.toFixed(1)} m on each side.`
+  return `Cross-section of the checked volume: ${v.corridorHalfWidthM.toFixed(1)} m on each side of the line, from the ground up to ${v.contingencyTopM.toFixed(1)} m. Flight height ${v.flightGeographyTopM} m. Ground risk buffer: a further ${v.groundRiskBufferM.toFixed(1)} m on each side.`
 })
 </script>
 
@@ -91,7 +91,7 @@ const description = computed(() => {
       />
       <circle :cx="CENTRE_X" :cy="shape.flightY" r="4" :fill="CORRIDOR_COLOURS.line" />
       <text :x="CENTRE_X + 7" :y="shape.flightY - 5" class="fill-slate-900">
-        {{ metres(altitudeM) }}
+        {{ metres(volumes.flightGeographyTopM) }}
       </text>
       <!-- Ground -->
       <line x1="0" :x2="WIDTH" :y1="GROUND_Y" :y2="GROUND_Y" stroke="#0f172a" stroke-width="1.5" />

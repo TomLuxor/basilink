@@ -14,7 +14,14 @@ import type { CorridorAnalysis } from '@/analysis/analyse'
 import { BASEMAPS, type BasemapId } from '@/config/basemaps'
 import { MAP_MAX_BOUNDS, REGION_BBOX } from '@/config/region'
 import type { Site } from '@/data/sites'
-import { addOverlays, showCorridor, showSites, showZones, SITES_LAYER } from '@/map/overlays'
+import {
+  addOverlays,
+  show3d,
+  showCorridor,
+  showSites,
+  showZones,
+  SITES_LAYER,
+} from '@/map/overlays'
 
 setWorkerUrl(workerUrl)
 
@@ -27,6 +34,7 @@ const props = defineProps<{
   toId: string | null
   analysis: CorridorAnalysis | null
   route: Feature<LineString> | null
+  view3d: boolean
 }>()
 
 const emit = defineEmits<{ selectSite: [id: string] }>()
@@ -53,7 +61,23 @@ function render() {
   showZones(map, props.zones, props.zonesVisible)
   showSites(map, props.sites, props.fromId, props.toId)
   showCorridor(map, props.analysis, props.route)
+  show3d(map, props.view3d)
 }
+
+/**
+ * Camera for the current view. In 3D the map is tilted and turned so that the corridor is seen
+ * from the side, start on the left: the corridor's direction then points to the right.
+ */
+function camera(): { pitch: number; bearing: number } {
+  if (!props.view3d) return { pitch: 0, bearing: 0 }
+  const line = props.analysis?.lineLv95
+  if (!line) return { pitch: 60, bearing: map?.getBearing() ?? 0 }
+  const [[x1, y1], [x2, y2]] = line
+  const azimuth = (Math.atan2(x2 - x1, y2 - y1) * 180) / Math.PI // clockwise from north
+  return { pitch: 60, bearing: azimuth - 90 }
+}
+
+const duration = () => (prefersReducedMotion() ? 0 : 800)
 
 /** Zooms to start and destination once both are chosen. */
 function fitToPair() {
@@ -61,7 +85,15 @@ function fitToPair() {
   const to = props.sites.find((site) => site.id === props.toId)
   if (!map || !from || !to) return
   const bounds = new LngLatBounds(from.position, from.position).extend(to.position)
-  map.fitBounds(bounds, { padding: 80, maxZoom: 15, duration: prefersReducedMotion() ? 0 : 800 })
+  map.fitBounds(bounds, { padding: 80, maxZoom: 15, duration: duration(), ...camera() })
+}
+
+/** Switches between the top view and the 3D view. */
+function updateView() {
+  if (!map) return
+  render()
+  if (props.fromId && props.toId) fitToPair()
+  else map.easeTo({ ...camera(), duration: duration() })
 }
 
 onMounted(() => {
@@ -117,6 +149,7 @@ watch(
   render,
 )
 watch(() => [props.fromId, props.toId], fitToPair)
+watch(() => props.view3d, updateView)
 
 onBeforeUnmount(() => {
   narrowScreen.removeEventListener('change', updateGestures)

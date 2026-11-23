@@ -96,7 +96,7 @@ const isInvalid = (key: keyof FlightParameters) => effective.value[key] !== para
     </summary>
 
     <form class="space-y-4 px-3 pt-1 pb-3" @submit.prevent>
-      <CorridorProfile :volumes="volumes" :altitude-m="effective.flightAltitudeM" />
+      <CorridorProfile :volumes="volumes" />
 
       <p
         v-if="volumes.contingencyTopM >= HEIGHT_LIMIT_M"

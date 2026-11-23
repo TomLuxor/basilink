@@ -34,11 +34,30 @@ const SOURCE = {
   corridor: 'basilink-corridor',
   route: 'basilink-route',
   sites: 'basilink-sites',
+  zoneSlices: 'basilink-zone-slices',
 }
 
 export const SITES_LAYER = 'basilink-sites'
 
 const ZONE_LAYERS = ['basilink-zones-fill', 'basilink-zones-line']
+
+/** Layers of the 3D view, hidden in the top view. */
+const LAYERS_3D = ['basilink-zones-3d', 'basilink-operational-3d', 'basilink-flight-3d']
+
+/** In 3D, zones without an upper limit are drawn up to this height above ground. */
+export const ZONE_3D_CEILING_M = 300
+
+/**
+ * In 3D, heights are drawn this many times taller. A corridor is about 100 m high but several
+ * kilometres long; at true scale the gap below a control zone would be invisible.
+ */
+export const VERTICAL_EXAGGERATION = 3
+
+const exaggerated = (height: ExpressionSpecification): ExpressionSpecification => [
+  '*',
+  height,
+  VERTICAL_EXAGGERATION,
+]
 
 const EMPTY: FeatureCollection = { type: 'FeatureCollection', features: [] }
 
@@ -158,6 +177,50 @@ export function addOverlays(map: MapLibreMap) {
     paint: { 'line-color': CORRIDOR_COLOURS.route, 'line-width': 4, 'line-opacity': 0.85 },
   })
 
+  // 3D view: the checked volume and the zones around it as blocks between their lower and upper
+  // limits, heights exaggerated. The ground is flat: all zone limits around Basel are above
+  // ground (AGL), so the heights relate correctly without a terrain model. Zones with limits
+  // above sea level are left out (see showCorridor).
+  map.addLayer({
+    id: 'basilink-zones-3d',
+    type: 'fill-extrusion',
+    source: SOURCE.zoneSlices,
+    layout: { visibility: 'none' },
+    paint: {
+      'fill-extrusion-color': zoneColour,
+      'fill-extrusion-base': exaggerated(['get', 'lowerLimitM']),
+      'fill-extrusion-height': exaggerated(['coalesce', ['get', 'upperLimitM'], ZONE_3D_CEILING_M]),
+      'fill-extrusion-opacity': 0.4,
+    },
+  })
+  map.addLayer({
+    id: 'basilink-operational-3d',
+    type: 'fill-extrusion',
+    source: SOURCE.corridor,
+    filter: isPart('operational-volume'),
+    layout: { visibility: 'none' },
+    paint: {
+      'fill-extrusion-color': CORRIDOR_COLOURS.operationalVolume,
+      'fill-extrusion-base': 0,
+      'fill-extrusion-height': exaggerated(['get', 'top']),
+      'fill-extrusion-opacity': 0.6,
+    },
+  })
+  // The flight height as a thin layer inside the checked volume.
+  map.addLayer({
+    id: 'basilink-flight-3d',
+    type: 'fill-extrusion',
+    source: SOURCE.corridor,
+    filter: isPart('operational-volume'),
+    layout: { visibility: 'none' },
+    paint: {
+      'fill-extrusion-color': CORRIDOR_COLOURS.line,
+      'fill-extrusion-base': exaggerated(['-', ['get', 'flightTop'], 1]),
+      'fill-extrusion-height': exaggerated(['+', ['get', 'flightTop'], 1]),
+      'fill-extrusion-opacity': 0.9,
+    },
+  })
+
   // Sites: larger dots for start and destination, labels from zoom 12.5 (always for the pair).
   map.addLayer({
     id: SITES_LAYER,
@@ -204,6 +267,10 @@ export function showZones(map: MapLibreMap, zones: FeatureCollection | null, vis
     map.setLayoutProperty(id, 'visibility', visible ? 'visible' : 'none')
 }
 
+export function show3d(map: MapLibreMap, enabled: boolean) {
+  for (const id of LAYERS_3D) map.setLayoutProperty(id, 'visibility', enabled ? 'visible' : 'none')
+}
+
 export function showSites(
   map: MapLibreMap,
   sites: Site[],
@@ -243,6 +310,22 @@ export function showCorridor(
     map.setFilter('basilink-zones-passed', zoneFilter(ids(['passes-below', 'passes-above'])))
   }
 
+  // 3D: only zones whose limits are both above ground can stand on the flat ground.
+  setData(map, SOURCE.zoneSlices, {
+    type: 'FeatureCollection',
+    features: (analysis?.zoneSlices ?? [])
+      .filter(({ zone }) => zone.lowerReference === 'AGL' && zone.upperReference === 'AGL')
+      .map(({ zone, geometry }) => ({
+        type: 'Feature',
+        geometry,
+        properties: {
+          category: zone.category,
+          lowerLimitM: zone.lowerLimitM,
+          upperLimitM: zone.upperLimitM,
+        },
+      })),
+  })
+
   setData(
     map,
     SOURCE.corridor,
@@ -257,7 +340,12 @@ export function showCorridor(
             },
             {
               type: 'Feature',
-              properties: { part: 'operational-volume' },
+              properties: {
+                part: 'operational-volume',
+                // Heights for the 3D view.
+                top: analysis.volumes.contingencyTopM,
+                flightTop: analysis.volumes.flightGeographyTopM,
+              },
               geometry: analysis.operationalVolume,
             },
             ...(analysis.abroad
