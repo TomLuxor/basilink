@@ -16,6 +16,26 @@ Status: the MVP is complete and deployed. The stretch goals are not built yet: a
 traffic-light matrix of all pairs, zones in Germany and France, and traffic-dependent driving
 times.
 
+## Why Basel?
+
+Drones have carried lab samples between Swiss hospitals since 2017:
+
+- in Lugano and Zurich, operated by Matternet (together with Swiss Post until 2022)
+  ([Swiss Post](https://www.swisspost.ch/en/about-us/media/press-releases/2022/swiss-post-hands-over-its-drone-operation-to-matternet),
+  [Matternet](https://investor.matternet.com/news-events/press-releases/detail/98/matternet-launches-worlds-longest-urban-drone-delivery-route-connecting-hospitals-and-laboratories-in-zurich-switzerland));
+- since 2023 between Buchs SG and Vaduz, for a lab group
+  ([SRF](https://www.srf.ch/news/schweiz/transportdrohne-fuer-labors-diese-drohne-fliegt-20-mal-taeglich-mit-laborproben)).
+
+No such service is publicly known in Basel (November 2026), and Basel is a hard case:
+
+- The EuroAirport and the Basel control zone cover most of the city. The airport zone is managed by
+  the French civil aviation authority (DGAC).
+- France and Germany are only a few kilometres from every hospital.
+
+Basilink makes this visible before anyone writes an application. With the default assumptions
+and the zones as of November 2026, 115 of the 136 site pairs need an exemption, and 11 corridors
+leave Switzerland.
+
 ## How the check works
 
 1. Pick a start and a destination: in the selects, in the site list, or by clicking two sites on
