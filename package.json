@@ -18,12 +18,16 @@
     "data:zones": "node scripts/fetch-zones.ts"
   },
   "dependencies": {
+    "@turf/boolean-intersects": "^7.4.0",
+    "@turf/boolean-within": "^7.4.0",
     "maplibre-gl": "^6.19.0",
+    "proj4": "^2.23.0",
     "vue": "^3.5.42"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.5",
     "@tsconfig/node24": "^24.0.5",
+    "@turf/bbox-clip": "^7.4.0",
     "@turf/simplify": "^7.4.0",
     "@types/geojson": "^7946.0.16",
     "@types/node": "^24.13.4",

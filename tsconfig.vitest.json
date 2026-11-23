@@ -6,8 +6,8 @@
   "exclude": [],
 
   "compilerOptions": {
-    // Tests run in Node.js, not in the browser.
-    "lib": [],
+    // Tests run in Node.js, not in the browser: modern JavaScript, no DOM.
+    "lib": ["ES2023"],
     "types": ["node"],
 
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.vitest.tsbuildinfo"
