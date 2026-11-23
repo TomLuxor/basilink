@@ -1,0 +1,1095 @@
+{
+  "provider": "openrouteservice, profile driving-car",
+  "attribution": "© openrouteservice.org by HeiGIT | Map data © OpenStreetMap contributors",
+  "computedOn": "2026-11-23",
+  "routes": {
+    "adullam-basel__adullam-riehen": {
+      "distanceM": 7714,
+      "durationS": 949
+    },
+    "adullam-basel__bethesda": {
+      "distanceM": 4370,
+      "durationS": 688
+    },
+    "adullam-basel__claraspital": {
+      "distanceM": 3592,
+      "durationS": 499
+    },
+    "adullam-basel__felix-platter": {
+      "distanceM": 1672,
+      "durationS": 217
+    },
+    "adullam-basel__ksbl-bruderholz": {
+      "distanceM": 5288,
+      "durationS": 702
+    },
+    "adullam-basel__ksbl-liestal": {
+      "distanceM": 19852,
+      "durationS": 1225
+    },
+    "adullam-basel__matthea": {
+      "distanceM": 1259,
+      "durationS": 182
+    },
+    "adullam-basel__merian-iselin": {
+      "distanceM": 1411,
+      "durationS": 273
+    },
+    "adullam-basel__rehab-basel": {
+      "distanceM": 3122,
+      "durationS": 429
+    },
+    "adullam-basel__schmerzklinik": {
+      "distanceM": 2403,
+      "durationS": 420
+    },
+    "adullam-basel__sonnhalde": {
+      "distanceM": 7935,
+      "durationS": 999
+    },
+    "adullam-basel__ukbb": {
+      "distanceM": 1021,
+      "durationS": 158
+    },
+    "adullam-basel__unilabs-basel": {
+      "distanceM": 2488,
+      "durationS": 413
+    },
+    "adullam-basel__upk": {
+      "distanceM": 3019,
+      "durationS": 411
+    },
+    "adullam-basel__usb": {
+      "distanceM": 637,
+      "durationS": 106
+    },
+    "adullam-basel__viollier-allschwil": {
+      "distanceM": 4024,
+      "durationS": 487
+    },
+    "adullam-riehen__adullam-basel": {
+      "distanceM": 7623,
+      "durationS": 946
+    },
+    "adullam-riehen__bethesda": {
+      "distanceM": 7521,
+      "durationS": 885
+    },
+    "adullam-riehen__claraspital": {
+      "distanceM": 4472,
+      "durationS": 534
+    },
+    "adullam-riehen__felix-platter": {
+      "distanceM": 8567,
+      "durationS": 971
+    },
+    "adullam-riehen__ksbl-bruderholz": {
+      "distanceM": 14462,
+      "durationS": 1349
+    },
+    "adullam-riehen__ksbl-liestal": {
+      "distanceM": 20011,
+      "durationS": 1404
+    },
+    "adullam-riehen__matthea": {
+      "distanceM": 6489,
+      "durationS": 780
+    },
+    "adullam-riehen__merian-iselin": {
+      "distanceM": 10057,
+      "durationS": 1168
+    },
+    "adullam-riehen__rehab-basel": {
+      "distanceM": 9233,
+      "durationS": 1057
+    },
+    "adullam-riehen__schmerzklinik": {
+      "distanceM": 6991,
+      "durationS": 864
+    },
+    "adullam-riehen__sonnhalde": {
+      "distanceM": 477,
+      "durationS": 117
+    },
+    "adullam-riehen__ukbb": {
+      "distanceM": 7697,
+      "durationS": 961
+    },
+    "adullam-riehen__unilabs-basel": {
+      "distanceM": 6838,
+      "durationS": 862
+    },
+    "adullam-riehen__upk": {
+      "distanceM": 9131,
+      "durationS": 1039
+    },
+    "adullam-riehen__usb": {
+      "distanceM": 7313,
+      "durationS": 909
+    },
+    "adullam-riehen__viollier-allschwil": {
+      "distanceM": 10660,
+      "durationS": 1209
+    },
+    "bethesda__adullam-basel": {
+      "distanceM": 7499,
+      "durationS": 712
+    },
+    "bethesda__adullam-riehen": {
+      "distanceM": 7158,
+      "durationS": 905
+    },
+    "bethesda__claraspital": {
+      "distanceM": 3435,
+      "durationS": 489
+    },
+    "bethesda__felix-platter": {
+      "distanceM": 7459,
+      "durationS": 647
+    },
+    "bethesda__ksbl-bruderholz": {
+      "distanceM": 7360,
+      "durationS": 799
+    },
+    "bethesda__ksbl-liestal": {
+      "distanceM": 13287,
+      "durationS": 928
+    },
+    "bethesda__matthea": {
+      "distanceM": 4525,
+      "durationS": 596
+    },
+    "bethesda__merian-iselin": {
+      "distanceM": 4751,
+      "durationS": 755
+    },
+    "bethesda__rehab-basel": {
+      "distanceM": 8125,
+      "durationS": 733
+    },
+    "bethesda__schmerzklinik": {
+      "distanceM": 2446,
+      "durationS": 411
+    },
+    "bethesda__sonnhalde": {
+      "distanceM": 7379,
+      "durationS": 956
+    },
+    "bethesda__ukbb": {
+      "distanceM": 7175,
+      "durationS": 700
+    },
+    "bethesda__unilabs-basel": {
+      "distanceM": 2053,
+      "durationS": 375
+    },
+    "bethesda__upk": {
+      "distanceM": 8023,
+      "durationS": 715
+    },
+    "bethesda__usb": {
+      "distanceM": 7189,
+      "durationS": 676
+    },
+    "bethesda__viollier-allschwil": {
+      "distanceM": 9552,
+      "durationS": 885
+    },
+    "claraspital__adullam-basel": {
+      "distanceM": 3723,
+      "durationS": 523
+    },
+    "claraspital__adullam-riehen": {
+      "distanceM": 4367,
+      "durationS": 534
+    },
+    "claraspital__bethesda": {
+      "distanceM": 3620,
+      "durationS": 463
+    },
+    "claraspital__felix-platter": {
+      "distanceM": 5370,
+      "durationS": 605
+    },
+    "claraspital__ksbl-bruderholz": {
+      "distanceM": 10562,
+      "durationS": 926
+    },
+    "claraspital__ksbl-liestal": {
+      "distanceM": 16110,
+      "durationS": 982
+    },
+    "claraspital__matthea": {
+      "distanceM": 2589,
+      "durationS": 357
+    },
+    "claraspital__merian-iselin": {
+      "distanceM": 5194,
+      "durationS": 768
+    },
+    "claraspital__rehab-basel": {
+      "distanceM": 6036,
+      "durationS": 690
+    },
+    "claraspital__schmerzklinik": {
+      "distanceM": 3091,
+      "durationS": 441
+    },
+    "claraspital__sonnhalde": {
+      "distanceM": 4588,
+      "durationS": 585
+    },
+    "claraspital__ukbb": {
+      "distanceM": 3796,
+      "durationS": 539
+    },
+    "claraspital__unilabs-basel": {
+      "distanceM": 2937,
+      "durationS": 440
+    },
+    "claraspital__upk": {
+      "distanceM": 5934,
+      "durationS": 673
+    },
+    "claraspital__usb": {
+      "distanceM": 3413,
+      "durationS": 487
+    },
+    "claraspital__viollier-allschwil": {
+      "distanceM": 7462,
+      "durationS": 843
+    },
+    "felix-platter__adullam-basel": {
+      "distanceM": 1400,
+      "durationS": 224
+    },
+    "felix-platter__adullam-riehen": {
+      "distanceM": 8406,
+      "durationS": 914
+    },
+    "felix-platter__bethesda": {
+      "distanceM": 7199,
+      "durationS": 618
+    },
+    "felix-platter__claraspital": {
+      "distanceM": 5579,
+      "durationS": 489
+    },
+    "felix-platter__ksbl-bruderholz": {
+      "distanceM": 6475,
+      "durationS": 775
+    },
+    "felix-platter__ksbl-liestal": {
+      "distanceM": 19689,
+      "durationS": 1138
+    },
+    "felix-platter__matthea": {
+      "distanceM": 2754,
+      "durationS": 365
+    },
+    "felix-platter__merian-iselin": {
+      "distanceM": 1665,
+      "durationS": 237
+    },
+    "felix-platter__rehab-basel": {
+      "distanceM": 1857,
+      "durationS": 302
+    },
+    "felix-platter__schmerzklinik": {
+      "distanceM": 3502,
+      "durationS": 491
+    },
+    "felix-platter__sonnhalde": {
+      "distanceM": 8627,
+      "durationS": 965
+    },
+    "felix-platter__ukbb": {
+      "distanceM": 1567,
+      "durationS": 272
+    },
+    "felix-platter__unilabs-basel": {
+      "distanceM": 3850,
+      "durationS": 530
+    },
+    "felix-platter__upk": {
+      "distanceM": 1755,
+      "durationS": 284
+    },
+    "felix-platter__usb": {
+      "distanceM": 1788,
+      "durationS": 300
+    },
+    "felix-platter__viollier-allschwil": {
+      "distanceM": 2390,
+      "durationS": 296
+    },
+    "ksbl-bruderholz__adullam-basel": {
+      "distanceM": 5622,
+      "durationS": 755
+    },
+    "ksbl-bruderholz__adullam-riehen": {
+      "distanceM": 11570,
+      "durationS": 1430
+    },
+    "ksbl-bruderholz__bethesda": {
+      "distanceM": 5621,
+      "durationS": 814
+    },
+    "ksbl-bruderholz__claraspital": {
+      "distanceM": 7448,
+      "durationS": 981
+    },
+    "ksbl-bruderholz__felix-platter": {
+      "distanceM": 5969,
+      "durationS": 759
+    },
+    "ksbl-bruderholz__ksbl-liestal": {
+      "distanceM": 18381,
+      "durationS": 1262
+    },
+    "ksbl-bruderholz__matthea": {
+      "distanceM": 6376,
+      "durationS": 854
+    },
+    "ksbl-bruderholz__merian-iselin": {
+      "distanceM": 4802,
+      "durationS": 654
+    },
+    "ksbl-bruderholz__rehab-basel": {
+      "distanceM": 7419,
+      "durationS": 971
+    },
+    "ksbl-bruderholz__schmerzklinik": {
+      "distanceM": 4558,
+      "durationS": 622
+    },
+    "ksbl-bruderholz__sonnhalde": {
+      "distanceM": 11791,
+      "durationS": 1481
+    },
+    "ksbl-bruderholz__ukbb": {
+      "distanceM": 6137,
+      "durationS": 830
+    },
+    "ksbl-bruderholz__unilabs-basel": {
+      "distanceM": 5084,
+      "durationS": 653
+    },
+    "ksbl-bruderholz__upk": {
+      "distanceM": 7317,
+      "durationS": 953
+    },
+    "ksbl-bruderholz__usb": {
+      "distanceM": 5754,
+      "durationS": 778
+    },
+    "ksbl-bruderholz__viollier-allschwil": {
+      "distanceM": 6765,
+      "durationS": 825
+    },
+    "ksbl-liestal__adullam-basel": {
+      "distanceM": 20124,
+      "durationS": 1277
+    },
+    "ksbl-liestal__adullam-riehen": {
+      "distanceM": 19787,
+      "durationS": 1500
+    },
+    "ksbl-liestal__bethesda": {
+      "distanceM": 14053,
+      "durationS": 991
+    },
+    "ksbl-liestal__claraspital": {
+      "distanceM": 16064,
+      "durationS": 1084
+    },
+    "ksbl-liestal__felix-platter": {
+      "distanceM": 20084,
+      "durationS": 1211
+    },
+    "ksbl-liestal__ksbl-bruderholz": {
+      "distanceM": 18520,
+      "durationS": 1291
+    },
+    "ksbl-liestal__matthea": {
+      "distanceM": 17154,
+      "durationS": 1191
+    },
+    "ksbl-liestal__merian-iselin": {
+      "distanceM": 17296,
+      "durationS": 1336
+    },
+    "ksbl-liestal__rehab-basel": {
+      "distanceM": 20750,
+      "durationS": 1297
+    },
+    "ksbl-liestal__schmerzklinik": {
+      "distanceM": 15703,
+      "durationS": 1097
+    },
+    "ksbl-liestal__sonnhalde": {
+      "distanceM": 20008,
+      "durationS": 1550
+    },
+    "ksbl-liestal__ukbb": {
+      "distanceM": 19800,
+      "durationS": 1264
+    },
+    "ksbl-liestal__unilabs-basel": {
+      "distanceM": 15310,
+      "durationS": 1062
+    },
+    "ksbl-liestal__upk": {
+      "distanceM": 20648,
+      "durationS": 1279
+    },
+    "ksbl-liestal__usb": {
+      "distanceM": 19814,
+      "durationS": 1241
+    },
+    "ksbl-liestal__viollier-allschwil": {
+      "distanceM": 22177,
+      "durationS": 1449
+    },
+    "matthea__adullam-basel": {
+      "distanceM": 1200,
+      "durationS": 176
+    },
+    "matthea__adullam-riehen": {
+      "distanceM": 6521,
+      "durationS": 776
+    },
+    "matthea__bethesda": {
+      "distanceM": 4731,
+      "durationS": 568
+    },
+    "matthea__claraspital": {
+      "distanceM": 2399,
+      "durationS": 327
+    },
+    "matthea__felix-platter": {
+      "distanceM": 2864,
+      "durationS": 336
+    },
+    "matthea__ksbl-bruderholz": {
+      "distanceM": 6289,
+      "durationS": 861
+    },
+    "matthea__ksbl-liestal": {
+      "distanceM": 17221,
+      "durationS": 1087
+    },
+    "matthea__merian-iselin": {
+      "distanceM": 2572,
+      "durationS": 439
+    },
+    "matthea__rehab-basel": {
+      "distanceM": 3530,
+      "durationS": 421
+    },
+    "matthea__schmerzklinik": {
+      "distanceM": 2240,
+      "durationS": 346
+    },
+    "matthea__sonnhalde": {
+      "distanceM": 6742,
+      "durationS": 827
+    },
+    "matthea__ukbb": {
+      "distanceM": 1273,
+      "durationS": 191
+    },
+    "matthea__unilabs-basel": {
+      "distanceM": 2087,
+      "durationS": 344
+    },
+    "matthea__upk": {
+      "distanceM": 3428,
+      "durationS": 404
+    },
+    "matthea__usb": {
+      "distanceM": 890,
+      "durationS": 139
+    },
+    "matthea__viollier-allschwil": {
+      "distanceM": 4956,
+      "durationS": 574
+    },
+    "merian-iselin__adullam-basel": {
+      "distanceM": 1652,
+      "durationS": 287
+    },
+    "merian-iselin__adullam-riehen": {
+      "distanceM": 10020,
+      "durationS": 1139
+    },
+    "merian-iselin__bethesda": {
+      "distanceM": 4798,
+      "durationS": 718
+    },
+    "merian-iselin__claraspital": {
+      "distanceM": 7193,
+      "durationS": 714
+    },
+    "merian-iselin__felix-platter": {
+      "distanceM": 1639,
+      "durationS": 239
+    },
+    "merian-iselin__ksbl-bruderholz": {
+      "distanceM": 5227,
+      "durationS": 658
+    },
+    "merian-iselin__ksbl-liestal": {
+      "distanceM": 17074,
+      "durationS": 1324
+    },
+    "merian-iselin__matthea": {
+      "distanceM": 2586,
+      "durationS": 440
+    },
+    "merian-iselin__rehab-basel": {
+      "distanceM": 3264,
+      "durationS": 490
+    },
+    "merian-iselin__schmerzklinik": {
+      "distanceM": 2569,
+      "durationS": 404
+    },
+    "merian-iselin__sonnhalde": {
+      "distanceM": 10241,
+      "durationS": 1189
+    },
+    "merian-iselin__ukbb": {
+      "distanceM": 2099,
+      "durationS": 383
+    },
+    "merian-iselin__unilabs-basel": {
+      "distanceM": 2917,
+      "durationS": 443
+    },
+    "merian-iselin__upk": {
+      "distanceM": 3161,
+      "durationS": 472
+    },
+    "merian-iselin__usb": {
+      "distanceM": 1965,
+      "durationS": 364
+    },
+    "merian-iselin__viollier-allschwil": {
+      "distanceM": 3154,
+      "durationS": 387
+    },
+    "rehab-basel__adullam-basel": {
+      "distanceM": 2761,
+      "durationS": 414
+    },
+    "rehab-basel__adullam-riehen": {
+      "distanceM": 9112,
+      "durationS": 1012
+    },
+    "rehab-basel__bethesda": {
+      "distanceM": 7905,
+      "durationS": 716
+    },
+    "rehab-basel__claraspital": {
+      "distanceM": 6285,
+      "durationS": 588
+    },
+    "rehab-basel__felix-platter": {
+      "distanceM": 1853,
+      "durationS": 305
+    },
+    "rehab-basel__ksbl-bruderholz": {
+      "distanceM": 7835,
+      "durationS": 964
+    },
+    "rehab-basel__ksbl-liestal": {
+      "distanceM": 20394,
+      "durationS": 1236
+    },
+    "rehab-basel__matthea": {
+      "distanceM": 3440,
+      "durationS": 462
+    },
+    "rehab-basel__merian-iselin": {
+      "distanceM": 3194,
+      "durationS": 481
+    },
+    "rehab-basel__schmerzklinik": {
+      "distanceM": 4863,
+      "durationS": 680
+    },
+    "rehab-basel__sonnhalde": {
+      "distanceM": 9333,
+      "durationS": 1063
+    },
+    "rehab-basel__ukbb": {
+      "distanceM": 2558,
+      "durationS": 428
+    },
+    "rehab-basel__unilabs-basel": {
+      "distanceM": 5210,
+      "durationS": 719
+    },
+    "rehab-basel__upk": {
+      "distanceM": 695,
+      "durationS": 161
+    },
+    "rehab-basel__usb": {
+      "distanceM": 3073,
+      "durationS": 427
+    },
+    "rehab-basel__viollier-allschwil": {
+      "distanceM": 4021,
+      "durationS": 551
+    },
+    "schmerzklinik__adullam-basel": {
+      "distanceM": 2369,
+      "durationS": 381
+    },
+    "schmerzklinik__adullam-riehen": {
+      "distanceM": 7323,
+      "durationS": 923
+    },
+    "schmerzklinik__bethesda": {
+      "distanceM": 2718,
+      "durationS": 421
+    },
+    "schmerzklinik__claraspital": {
+      "distanceM": 3201,
+      "durationS": 474
+    },
+    "schmerzklinik__felix-platter": {
+      "distanceM": 3513,
+      "durationS": 456
+    },
+    "schmerzklinik__ksbl-bruderholz": {
+      "distanceM": 4592,
+      "durationS": 581
+    },
+    "schmerzklinik__ksbl-liestal": {
+      "distanceM": 15442,
+      "durationS": 1028
+    },
+    "schmerzklinik__matthea": {
+      "distanceM": 3169,
+      "durationS": 466
+    },
+    "schmerzklinik__merian-iselin": {
+      "distanceM": 2646,
+      "durationS": 393
+    },
+    "schmerzklinik__rehab-basel": {
+      "distanceM": 4963,
+      "durationS": 668
+    },
+    "schmerzklinik__sonnhalde": {
+      "distanceM": 7543,
+      "durationS": 974
+    },
+    "schmerzklinik__ukbb": {
+      "distanceM": 2837,
+      "durationS": 452
+    },
+    "schmerzklinik__unilabs-basel": {
+      "distanceM": 837,
+      "durationS": 146
+    },
+    "schmerzklinik__upk": {
+      "distanceM": 4861,
+      "durationS": 650
+    },
+    "schmerzklinik__usb": {
+      "distanceM": 2453,
+      "durationS": 400
+    },
+    "schmerzklinik__viollier-allschwil": {
+      "distanceM": 5152,
+      "durationS": 655
+    },
+    "sonnhalde__adullam-basel": {
+      "distanceM": 7650,
+      "durationS": 976
+    },
+    "sonnhalde__adullam-riehen": {
+      "distanceM": 477,
+      "durationS": 117
+    },
+    "sonnhalde__bethesda": {
+      "distanceM": 7548,
+      "durationS": 915
+    },
+    "sonnhalde__claraspital": {
+      "distanceM": 4499,
+      "durationS": 564
+    },
+    "sonnhalde__felix-platter": {
+      "distanceM": 8594,
+      "durationS": 1002
+    },
+    "sonnhalde__ksbl-bruderholz": {
+      "distanceM": 14489,
+      "durationS": 1379
+    },
+    "sonnhalde__ksbl-liestal": {
+      "distanceM": 20037,
+      "durationS": 1435
+    },
+    "sonnhalde__matthea": {
+      "distanceM": 6516,
+      "durationS": 810
+    },
+    "sonnhalde__merian-iselin": {
+      "distanceM": 10084,
+      "durationS": 1198
+    },
+    "sonnhalde__rehab-basel": {
+      "distanceM": 9260,
+      "durationS": 1087
+    },
+    "sonnhalde__schmerzklinik": {
+      "distanceM": 7018,
+      "durationS": 894
+    },
+    "sonnhalde__ukbb": {
+      "distanceM": 7723,
+      "durationS": 991
+    },
+    "sonnhalde__unilabs-basel": {
+      "distanceM": 6865,
+      "durationS": 892
+    },
+    "sonnhalde__upk": {
+      "distanceM": 9158,
+      "durationS": 1069
+    },
+    "sonnhalde__usb": {
+      "distanceM": 7340,
+      "durationS": 940
+    },
+    "sonnhalde__viollier-allschwil": {
+      "distanceM": 10687,
+      "durationS": 1240
+    },
+    "ukbb__adullam-basel": {
+      "distanceM": 526,
+      "durationS": 79
+    },
+    "ukbb__adullam-riehen": {
+      "distanceM": 7293,
+      "durationS": 885
+    },
+    "ukbb__bethesda": {
+      "distanceM": 6941,
+      "durationS": 642
+    },
+    "ukbb__claraspital": {
+      "distanceM": 3171,
+      "durationS": 436
+    },
+    "ukbb__felix-platter": {
+      "distanceM": 1616,
+      "durationS": 283
+    },
+    "ukbb__ksbl-bruderholz": {
+      "distanceM": 5775,
+      "durationS": 772
+    },
+    "ukbb__ksbl-liestal": {
+      "distanceM": 19431,
+      "durationS": 1161
+    },
+    "ukbb__matthea": {
+      "distanceM": 838,
+      "durationS": 118
+    },
+    "ukbb__merian-iselin": {
+      "distanceM": 1898,
+      "durationS": 342
+    },
+    "ukbb__rehab-basel": {
+      "distanceM": 3012,
+      "durationS": 406
+    },
+    "ukbb__schmerzklinik": {
+      "distanceM": 3078,
+      "durationS": 464
+    },
+    "ukbb__sonnhalde": {
+      "distanceM": 7513,
+      "durationS": 936
+    },
+    "ukbb__unilabs-basel": {
+      "distanceM": 2924,
+      "durationS": 462
+    },
+    "ukbb__upk": {
+      "distanceM": 2910,
+      "durationS": 388
+    },
+    "ukbb__usb": {
+      "distanceM": 216,
+      "durationS": 43
+    },
+    "ukbb__viollier-allschwil": {
+      "distanceM": 3967,
+      "durationS": 553
+    },
+    "unilabs-basel__adullam-basel": {
+      "distanceM": 2392,
+      "durationS": 384
+    },
+    "unilabs-basel__adullam-riehen": {
+      "distanceM": 6725,
+      "durationS": 833
+    },
+    "unilabs-basel__bethesda": {
+      "distanceM": 2592,
+      "durationS": 418
+    },
+    "unilabs-basel__claraspital": {
+      "distanceM": 2603,
+      "durationS": 384
+    },
+    "unilabs-basel__felix-platter": {
+      "distanceM": 3537,
+      "durationS": 459
+    },
+    "unilabs-basel__ksbl-bruderholz": {
+      "distanceM": 4615,
+      "durationS": 584
+    },
+    "unilabs-basel__ksbl-liestal": {
+      "distanceM": 15365,
+      "durationS": 1035
+    },
+    "unilabs-basel__matthea": {
+      "distanceM": 2571,
+      "durationS": 376
+    },
+    "unilabs-basel__merian-iselin": {
+      "distanceM": 2669,
+      "durationS": 397
+    },
+    "unilabs-basel__rehab-basel": {
+      "distanceM": 4986,
+      "durationS": 671
+    },
+    "unilabs-basel__schmerzklinik": {
+      "distanceM": 365,
+      "durationS": 53
+    },
+    "unilabs-basel__sonnhalde": {
+      "distanceM": 6945,
+      "durationS": 884
+    },
+    "unilabs-basel__ukbb": {
+      "distanceM": 2860,
+      "durationS": 455
+    },
+    "unilabs-basel__upk": {
+      "distanceM": 4884,
+      "durationS": 654
+    },
+    "unilabs-basel__usb": {
+      "distanceM": 2477,
+      "durationS": 403
+    },
+    "unilabs-basel__viollier-allschwil": {
+      "distanceM": 5175,
+      "durationS": 658
+    },
+    "upk__adullam-basel": {
+      "distanceM": 2658,
+      "durationS": 396
+    },
+    "upk__adullam-riehen": {
+      "distanceM": 9010,
+      "durationS": 995
+    },
+    "upk__bethesda": {
+      "distanceM": 7802,
+      "durationS": 699
+    },
+    "upk__claraspital": {
+      "distanceM": 6183,
+      "durationS": 570
+    },
+    "upk__felix-platter": {
+      "distanceM": 1751,
+      "durationS": 288
+    },
+    "upk__ksbl-bruderholz": {
+      "distanceM": 7733,
+      "durationS": 947
+    },
+    "upk__ksbl-liestal": {
+      "distanceM": 20292,
+      "durationS": 1218
+    },
+    "upk__matthea": {
+      "distanceM": 3338,
+      "durationS": 444
+    },
+    "upk__merian-iselin": {
+      "distanceM": 3092,
+      "durationS": 463
+    },
+    "upk__rehab-basel": {
+      "distanceM": 695,
+      "durationS": 161
+    },
+    "upk__schmerzklinik": {
+      "distanceM": 4760,
+      "durationS": 663
+    },
+    "upk__sonnhalde": {
+      "distanceM": 9231,
+      "durationS": 1045
+    },
+    "upk__ukbb": {
+      "distanceM": 2455,
+      "durationS": 410
+    },
+    "upk__unilabs-basel": {
+      "distanceM": 5108,
+      "durationS": 702
+    },
+    "upk__usb": {
+      "distanceM": 2971,
+      "durationS": 410
+    },
+    "upk__viollier-allschwil": {
+      "distanceM": 3919,
+      "durationS": 534
+    },
+    "usb__adullam-basel": {
+      "distanceM": 593,
+      "durationS": 104
+    },
+    "usb__adullam-riehen": {
+      "distanceM": 7360,
+      "durationS": 910
+    },
+    "usb__bethesda": {
+      "distanceM": 7008,
+      "durationS": 667
+    },
+    "usb__claraspital": {
+      "distanceM": 3238,
+      "durationS": 461
+    },
+    "usb__felix-platter": {
+      "distanceM": 2226,
+      "durationS": 312
+    },
+    "usb__ksbl-bruderholz": {
+      "distanceM": 5842,
+      "durationS": 797
+    },
+    "usb__ksbl-liestal": {
+      "distanceM": 19498,
+      "durationS": 1186
+    },
+    "usb__matthea": {
+      "distanceM": 905,
+      "durationS": 143
+    },
+    "usb__merian-iselin": {
+      "distanceM": 1965,
+      "durationS": 368
+    },
+    "usb__rehab-basel": {
+      "distanceM": 3080,
+      "durationS": 431
+    },
+    "usb__schmerzklinik": {
+      "distanceM": 3145,
+      "durationS": 489
+    },
+    "usb__sonnhalde": {
+      "distanceM": 7581,
+      "durationS": 961
+    },
+    "usb__ukbb": {
+      "distanceM": 666,
+      "durationS": 119
+    },
+    "usb__unilabs-basel": {
+      "distanceM": 2991,
+      "durationS": 488
+    },
+    "usb__upk": {
+      "distanceM": 2977,
+      "durationS": 413
+    },
+    "usb__viollier-allschwil": {
+      "distanceM": 4578,
+      "durationS": 581
+    },
+    "viollier-allschwil__adullam-basel": {
+      "distanceM": 3702,
+      "durationS": 481
+    },
+    "viollier-allschwil__adullam-riehen": {
+      "distanceM": 10654,
+      "durationS": 1198
+    },
+    "viollier-allschwil__bethesda": {
+      "distanceM": 9446,
+      "durationS": 902
+    },
+    "viollier-allschwil__claraspital": {
+      "distanceM": 7827,
+      "durationS": 774
+    },
+    "viollier-allschwil__felix-platter": {
+      "distanceM": 2545,
+      "durationS": 342
+    },
+    "viollier-allschwil__ksbl-bruderholz": {
+      "distanceM": 6704,
+      "durationS": 816
+    },
+    "viollier-allschwil__ksbl-liestal": {
+      "distanceM": 21936,
+      "durationS": 1422
+    },
+    "viollier-allschwil__matthea": {
+      "distanceM": 4711,
+      "durationS": 632
+    },
+    "viollier-allschwil__merian-iselin": {
+      "distanceM": 3225,
+      "durationS": 386
+    },
+    "viollier-allschwil__rehab-basel": {
+      "distanceM": 4105,
+      "durationS": 586
+    },
+    "viollier-allschwil__schmerzklinik": {
+      "distanceM": 5195,
+      "durationS": 662
+    },
+    "viollier-allschwil__sonnhalde": {
+      "distanceM": 10875,
+      "durationS": 1249
+    },
+    "viollier-allschwil__ukbb": {
+      "distanceM": 3868,
+      "durationS": 529
+    },
+    "viollier-allschwil__unilabs-basel": {
+      "distanceM": 5542,
+      "durationS": 701
+    },
+    "viollier-allschwil__upk": {
+      "distanceM": 4003,
+      "durationS": 569
+    },
+    "viollier-allschwil__usb": {
+      "distanceM": 4089,
+      "durationS": 557
+    }
+  }
+}
