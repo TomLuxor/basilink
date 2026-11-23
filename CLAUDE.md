@@ -72,6 +72,8 @@ A lower-case `d:\` makes every test fail with "reading 'config'" (vitest#5251).
 - Secrets (e.g. `ORS_API_KEY`) are only used by scripts in GitHub Actions or from `.env.local`.
   Never ship them to the browser, and never give a secret the `VITE_` prefix (Vite inlines those
   into the bundle).
+- UI copy is short. Prefer visuals (badges, bars, diagrams, icons) over prose, and put details in
+  `<details>` (D25). Every visual still needs a text equivalent for screen readers.
 - Default parameters must follow regulation and the SORA 2.5 method (D17). Every number in the
   UI is labelled as an assumption and names its source.
 
