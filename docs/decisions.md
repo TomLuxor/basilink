@@ -354,3 +354,19 @@ Replaces the stretch goal "DE/FR zones".
   clipped copies, and no verified official vector source with a clear licence was found for France.
 - Instead, the analysis returns the part of the operational volume outside Switzerland (Turf
   `difference` in LV95). The map darkens that part, and the warning names LBA and DGAC.
+
+### D27 3D view
+
+- A "3D" switch on the map tilts it by 60° and turns it so that the corridor is seen from the
+  side, start on the left.
+- It shows the checked volume, with the flight height as a green layer, and the zones in the
+  operational volume as blocks between their lower and upper limits.
+- Zones are cut to the ground risk area (Turf `intersect`). The control zone and the airport zone
+  cover most of the region; as full blocks they would hide everything else.
+- Heights are drawn three times taller. A corridor is about 100 m high but several kilometres
+  long; at true scale the 5 m gap below the control zone would be invisible. The legend says so.
+- No terrain model: all zone limits around Basel are above ground, so a flat ground keeps the
+  heights in the right relation and saves another data source. Zones with limits above sea level
+  are left out of the 3D view; zones without an upper limit end at 300 m.
+- The 3D view adds no information that the result panel lacks. It is a visual aid, and the text
+  stays the reference for screen readers.
