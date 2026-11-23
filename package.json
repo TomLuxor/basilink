@@ -1,0 +1,49 @@
+{
+  "name": "basilink",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pre-check tool for drone corridors carrying lab samples in the Basel region",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --build && vite build",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc --build",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "data:zones": "node scripts/fetch-zones.ts"
+  },
+  "dependencies": {
+    "maplibre-gl": "^6.19.0",
+    "vue": "^3.5.42"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.5",
+    "@tsconfig/node24": "^24.0.5",
+    "@turf/simplify": "^7.4.0",
+    "@types/geojson": "^7946.0.16",
+    "@types/node": "^24.13.4",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "@vitest/eslint-plugin": "^1.6.27",
+    "@vue/eslint-config-typescript": "^14.9.0",
+    "@vue/tsconfig": "^0.9.1",
+    "eslint": "^10.10.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-vue": "~10.11.0",
+    "jiti": "^2.7.0",
+    "prettier": "3.9.6",
+    "tailwindcss": "^4.3.5",
+    "typescript": "~6.0.0",
+    "vite": "^8.2.2",
+    "vitest": "^4.1.11",
+    "vue-eslint-parser": "^10.4.1",
+    "vue-tsc": "^3.3.11"
+  },
+  "engines": {
+    "node": "^22.18.0 || >=24.12.0"
+  }
+}

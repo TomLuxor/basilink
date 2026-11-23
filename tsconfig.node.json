@@ -1,0 +1,30 @@
+// TSConfig for code that runs in Node.js: tool configs and the data scripts in scripts/.
+// The data scripts are executed with Node's built-in type stripping (no build step),
+// so they must only use erasable TypeScript syntax and import local files with `.ts`.
+{
+  "extends": "@tsconfig/node24/tsconfig.json",
+  "include": [
+    "vite.config.*",
+    "vitest.config.*",
+    "eslint.config.*",
+    "scripts/**/*.ts",
+    // Shared with the app: imported by the data scripts.
+    "src/config/region.ts",
+    "src/types/zone.ts"
+  ],
+  "compilerOptions": {
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "noUncheckedIndexedAccess": true,
+
+    // Include Node.js types and avoid accidentally including other `@types/*` packages.
+    "types": ["node"],
+
+    // Type-checking only; Vite and Node do the actual execution.
+    "noEmit": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo"
+  }
+}

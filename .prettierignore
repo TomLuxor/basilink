@@ -1,0 +1,5 @@
+# Generated or vendored files
+dist
+coverage
+package-lock.json
+public/data
