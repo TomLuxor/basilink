@@ -32,6 +32,8 @@ EuroAirport and the border area. The app offers a "Map / Aerial" switch. An OSM-
 
 ### D4 Geometry: analyse in LV95 metres (proj4), Turf only for polygon operations
 
+_The check itself uses distances since D28; Turf remains for the map geometry._
+
 The geo.admin height and profile APIs accept LV95/LV03 only, so proj4 is needed anyway. In LV95
 the corridor is simple to build and explain: a straight line plus a buffer in metres. Turf modules
 (`intersect`, `boolean-intersects`) do the planar polygon operations. The map displays WGS84.
@@ -370,3 +372,25 @@ Replaces the stretch goal "DE/FR zones".
   are left out of the 3D view; zones without an upper limit end at 300 m.
 - The 3D view adds no information that the result panel lacks. It is a visual aid, and the text
   stays the reference for screen readers.
+
+### D28 Matrix of all pairs, and a check by distance
+
+- **All pairs** rates the 136 site pairs as a traffic light: red if any zone needs an exemption,
+  amber if there is no zone conflict but the corridor leaves Switzerland, green otherwise. It
+  rates the zones only; every BVLOS flight needs a FOCA authorisation anyway. With the defaults
+  and the zones of November 2026: 115 red, 0 amber (all 11 border-crossing pairs also have a
+  conflict), 21 green.
+- The matrix is a real table: row = start, column = destination, both triangles filled (the
+  corridor is the same in both directions). Each light also has its own shape (square,
+  diamond, circle), so it does not rely on colour alone. The grid is one tab stop; the arrow keys
+  move between cells (roving tabindex), Enter or a click selects the pair.
+- The lights follow the current assumptions and are computed only while the matrix is open.
+- **Faster check:** intersecting the corridor polygon with zone polygons (Turf) took about 50 ms
+  per pair, 7 s for all pairs. The check now measures the distance from the flight line to each
+  zone instead: the operational volume is exactly the set of points within its half width of
+  the line, so a zone lies in it if its distance is at most that half width (and in the ground
+  risk buffer if at most half width + buffer). This is plain geometry in LV95
+  (`src/analysis/corridor.ts`), exact at the round ends, and takes 57 ms for all 136 pairs with
+  the same verdicts as before. The border check works the same way.
+- Turf polygon clipping is still used, but only for the map geometry of the selected pair (the
+  part abroad, the zone slices of the 3D view).

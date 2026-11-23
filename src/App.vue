@@ -6,6 +6,7 @@ import BasemapSwitcher from '@/components/BasemapSwitcher.vue'
 import DataSources from '@/components/DataSources.vue'
 import FlightAssumptions from '@/components/FlightAssumptions.vue'
 import MapLegend from '@/components/MapLegend.vue'
+import PairMatrix from '@/components/PairMatrix.vue'
 import PairSelect from '@/components/PairSelect.vue'
 import ResultPanel from '@/components/ResultPanel.vue'
 import SiteList from '@/components/SiteList.vue'
@@ -18,6 +19,7 @@ const { parameters } = check
 const basemap = ref<BasemapId>('light')
 const zonesVisible = ref(true)
 const view3d = ref(false)
+const matrixOpen = ref(false)
 </script>
 
 <template>
@@ -29,7 +31,10 @@ const view3d = ref(false)
   <main
     class="grid min-h-dvh bg-white text-slate-900 md:grid-cols-[26rem_1fr] md:grid-rows-[auto_1fr]"
   >
-    <section aria-labelledby="app-title" class="space-y-4 p-4 md:border-r md:border-slate-200">
+    <section
+      aria-labelledby="app-title"
+      class="min-w-0 space-y-4 p-4 md:border-r md:border-slate-200"
+    >
       <header class="flex items-center gap-3">
         <span class="rounded-lg bg-teal-700 p-1.5 text-white">
           <Drone class="size-6" />
@@ -81,7 +86,7 @@ const view3d = ref(false)
       </div>
     </section>
 
-    <div class="space-y-6 p-4 md:border-r md:border-slate-200">
+    <div class="min-w-0 space-y-6 p-4 md:border-r md:border-slate-200">
       <ResultPanel
         :analysis="check.analysis.value"
         :from="check.from.value"
@@ -91,19 +96,31 @@ const view3d = ref(false)
         :load-error="check.loadError.value"
       />
 
-      <FlightAssumptions
-        v-model="parameters"
-        :volumes="check.volumes.value"
-        @reset="check.resetParameters"
-      />
+      <div class="space-y-2">
+        <FlightAssumptions
+          v-model="parameters"
+          :volumes="check.volumes.value"
+          @reset="check.resetParameters"
+        />
 
-      <SiteList
-        :sites="check.sites"
-        :from-id="check.fromId.value"
-        :to-id="check.toId.value"
-        @set-from="check.setFrom"
-        @set-to="check.setTo"
-      />
+        <!-- The lights are computed only while the matrix is open. -->
+        <PairMatrix
+          :sites="check.sites"
+          :lights="matrixOpen ? check.pairLights.value : null"
+          :from-id="check.fromId.value"
+          :to-id="check.toId.value"
+          @toggle="matrixOpen = $event"
+          @select-pair="check.selectPair"
+        />
+
+        <SiteList
+          :sites="check.sites"
+          :from-id="check.fromId.value"
+          :to-id="check.toId.value"
+          @set-from="check.setFrom"
+          @set-to="check.setTo"
+        />
+      </div>
 
       <DataSources :meta="check.zoneMeta.value" :route-index="check.routeIndex.value" />
     </div>

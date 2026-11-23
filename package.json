@@ -21,8 +21,6 @@
   },
   "dependencies": {
     "@lucide/vue": "1.70.0",
-    "@turf/boolean-intersects": "^7.4.0",
-    "@turf/boolean-within": "^7.4.0",
     "@turf/difference": "^7.4.0",
     "@turf/intersect": "^7.4.0",
     "maplibre-gl": "^6.19.0",

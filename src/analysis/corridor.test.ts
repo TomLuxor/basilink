@@ -1,17 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import type { Lv95Point } from './lv95'
-import { corridorRing, distanceM } from './corridor'
-
-/** Shortest distance from point p to the segment a–b. */
-function distanceToSegment(p: Lv95Point, a: Lv95Point, b: Lv95Point): number {
-  const [dx, dy] = [b[0] - a[0], b[1] - a[1]]
-  const lengthSquared = dx * dx + dy * dy
-  const t =
-    lengthSquared === 0
-      ? 0
-      : Math.max(0, Math.min(1, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / lengthSquared))
-  return Math.hypot(p[0] - (a[0] + t * dx), p[1] - (a[1] + t * dy))
-}
+import type { Lv95Point, Lv95Polygon } from './lv95'
+import {
+  corridorRing,
+  distanceM,
+  distanceToPolygonM,
+  insidePolygon,
+  pointToSegmentM,
+  segmentToSegmentM,
+} from './corridor'
 
 /** Signed area (shoelace formula); positive for counter-clockwise rings. */
 function signedArea(ring: Lv95Point[]): number {
@@ -41,7 +37,7 @@ describe('corridorRing', () => {
 
   it('keeps every vertex exactly at the buffer distance from the segment', () => {
     for (const point of corridorRing(a, b, halfWidth)) {
-      expect(distanceToSegment(point, a, b)).toBeCloseTo(halfWidth, 6)
+      expect(pointToSegmentM(point, a, b)).toBeCloseTo(halfWidth, 6)
     }
   })
 
@@ -55,5 +51,53 @@ describe('corridorRing', () => {
     for (const point of corridorRing(a, a, halfWidth)) {
       expect(distanceM(point, a)).toBeCloseTo(halfWidth, 6)
     }
+  })
+})
+
+describe('segmentToSegmentM', () => {
+  it('is 0 for crossing or touching segments', () => {
+    expect(segmentToSegmentM([0, 0], [10, 10], [0, 10], [10, 0])).toBe(0)
+    expect(segmentToSegmentM([0, 0], [10, 0], [5, 0], [5, 8])).toBe(0)
+  })
+
+  it('measures the gap between parallel and skewed segments', () => {
+    expect(segmentToSegmentM([0, 0], [10, 0], [0, 30], [10, 30])).toBe(30)
+    expect(segmentToSegmentM([0, 0], [10, 0], [13, 4], [20, 20])).toBe(5)
+  })
+})
+
+describe('distanceToPolygonM', () => {
+  // A 100 m square with a 40 m hole in the middle.
+  const square: Lv95Polygon = [
+    [
+      [0, 0],
+      [100, 0],
+      [100, 100],
+      [0, 100],
+      [0, 0],
+    ],
+    [
+      [30, 30],
+      [70, 30],
+      [70, 70],
+      [30, 70],
+      [30, 30],
+    ],
+  ]
+
+  it('knows which points are inside, holes excluded', () => {
+    expect(insidePolygon([10, 10], square)).toBe(true)
+    expect(insidePolygon([50, 50], square)).toBe(false)
+    expect(insidePolygon([150, 50], square)).toBe(false)
+  })
+
+  it('is 0 when the line lies inside or crosses the area', () => {
+    expect(distanceToPolygonM([10, 10], [20, 20], square)).toBe(0)
+    expect(distanceToPolygonM([-50, 10], [150, 10], square)).toBe(0)
+  })
+
+  it('measures lines beside the area and inside the hole', () => {
+    expect(distanceToPolygonM([-50, 120], [150, 120], square)).toBe(20)
+    expect(distanceToPolygonM([40, 50], [60, 50], square)).toBe(10)
   })
 })
