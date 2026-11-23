@@ -1,0 +1,40 @@
+# Refreshes the FOCA (BAZL) drone restriction zones once a day.
+# The data script produces identical files when nothing changed, so a commit is only made
+# when FOCA actually published new data. The push then triggers a new deployment.
+name: Update zone data
+
+on:
+  schedule:
+    - cron: '30 4 * * *' # daily at 04:30 UTC
+  workflow_dispatch: # allows a manual run from the Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-zones
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Download and prepare zones
+        run: npm run data:zones
+      - name: Commit if the data changed
+        run: |
+          if git diff --quiet -- public/data; then
+            echo "Zone data unchanged."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data
+          git commit -m "data: update BAZL zones ($(node -p "require('./public/data/zones-meta.json').dataAsOf.slice(0, 10)"))"
+          git push
