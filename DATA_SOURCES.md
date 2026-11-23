@@ -12,6 +12,7 @@ app, and how fresh it is. Decisions behind these choices are in [docs/decisions.
 | Hospitals in Basel-Stadt    | Canton of Basel-Stadt                    | Opendata BY                       | curated in `src/data/sites.ts` | by hand                  |
 | Other sites                 | swisstopo gazetteer, company websites    | facts (name, address, position)   | curated in `src/data/sites.ts` | by hand                  |
 | Driving routes              | openrouteservice (HeiGIT), OpenStreetMap | ORS terms, OSM: ODbL              | static files in `public/data`  | monthly (GitHub Action)  |
+| Driving times with traffic  | Mapbox Directions API                    | Mapbox terms, no storing          | asked live per pair, not kept  | on every request         |
 
 All attributions also appear in the app: in the map's attribution line and in the "Data sources"
 section of the panel.
@@ -93,7 +94,8 @@ no coordinates and are licensed BY-ASK, so they are not used.
 - **What:** the fastest car route for every ordered pair of sites (17 sites, 272 routes), with
   distance, duration without traffic and the road geometry.
 - **Where:** openrouteservice Directions API, profile `driving-car`, operated by HeiGIT
-  (`api.heigit.org/openrouteservice`). The road network is OpenStreetMap.
+  (`api.heigit.org/openrouteservice`). The road network is OpenStreetMap. The durations come from
+  speed profiles and do not include traffic; see the next section.
 - **Terms:** attribution "© openrouteservice.org by HeiGIT | Map data © OpenStreetMap
   contributors". OpenStreetMap data is licensed under the
   [ODbL](https://www.openstreetmap.org/copyright). The ORS terms of service
@@ -103,6 +105,22 @@ no coordinates and are licensed BY-ASK, so they are not used.
   per pair. The browser never calls openrouteservice, so no API key reaches it (D16, D19).
 - **Refresh:** `.github/workflows/update-routes.yml` runs monthly with the repository secret
   `ORS_API_KEY`, and only commits after the unit tests pass with the new routes.
+
+## Driving times with typical traffic (Mapbox)
+
+- **What:** the driving time of the selected pair with typical traffic, for departures at 07:30,
+  12:00, 17:30 and 22:00 Swiss time on the next Tuesday at least two days ahead.
+- **Where:** [Mapbox Directions API](https://docs.mapbox.com/api/navigation/directions/), profile
+  `driving-traffic` with `depart_at`. For future departures Mapbox predicts from historical
+  traffic data.
+- **Terms:** [Mapbox product terms](https://www.mapbox.com/legal/product-terms) and
+  [terms of service](https://www.mapbox.com/legal/tos). Results must not be stored or cached
+  (2.10.1), requests must answer a user's action (1.9), and the Mapbox logo must appear next to
+  the results (1.4.1). The terms' driving-directions policy is disclosed in the app with a link.
+- **In the app:** the browser calls the own Vercel Function `api/drive-times.ts` when "Car by time
+  of day" is open. The function accepts listed site IDs only, adds the token `MAPBOX_TOKEN` (a
+  Vercel environment variable) and asks Mapbox. Nothing is stored: the answer is marked
+  `no-store`, and the app keeps only the current pair in memory (D29).
 
 ## Method references (no data imported)
 

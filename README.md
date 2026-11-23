@@ -12,9 +12,9 @@ Aviation (FOCA/BAZL). It also compares the estimated flight time with the drivin
 
 ![Basilink on a desktop screen: the panel on the left says "Exemption needed" for the corridor from University Hospital Basel to the Viollier laboratory, with drone and road times; the map on the right shows the corridor, the road route and the restriction zones.](docs/screenshots/desktop.webp)
 
-Status: the MVP, the 3D view (D27) and the matrix of all pairs (D28) are complete and deployed.
-Still open: traffic-dependent driving times. Zones in Germany and France were dropped
-in favour of showing the part of a corridor abroad (D26).
+Status: the MVP and the stretch goals are complete and deployed: the 3D view (D27), the matrix
+of all pairs (D28) and driving times with typical traffic (D29). Zones in Germany and France were
+dropped in favour of showing the part of a corridor abroad (D26).
 
 ## Why Basel?
 
@@ -54,7 +54,9 @@ leave Switzerland.
    It also names the authorities to contact. If the corridor leaves Switzerland, the map darkens
    the part abroad and the warning names the authorities there.
 
-5. The flight time (direct line at cruise speed) is compared with a pre-computed driving route.
+5. The flight time (direct line at cruise speed) is compared with a pre-computed driving route
+   without traffic. **Car by time of day** adds the driving time with typical traffic at 07:30,
+   12:00, 17:30 and 22:00, asked live from Mapbox.
 6. Switch the map to **3D** to see the corridor and the zones around it from the side, with
    heights drawn three times taller.
 7. **All pairs** rates all 136 site pairs at once as a traffic-light matrix: red needs an
@@ -92,6 +94,8 @@ through by script. Not done yet: a test with real screen readers (NVDA, VoiceOve
 - the analysis: LV95 conversion, SORA volumes, corridor geometry, vertical limits, verdicts;
 - formatting, flight parameters and the data scripts (zone transform, route parsing);
 - the generated data: every ordered site pair has a route, zones match their metadata;
+- the traffic function: listed sites only, the departure day, and Mapbox errors that never
+  reveal the token;
 - the app state end to end, with the real data files and no network, for example
   USB → Viollier needs an exemption because of the airport zone.
 
@@ -128,9 +132,17 @@ published new data.
 
 ## Deployment
 
-The app is a static site on [Vercel](https://vercel.com), connected to this repository. Every push
-to `main` updates the production site, and every other branch gets its own preview URL. Vercel
-detects the Vite setup on its own, so there is no `vercel.json` and no environment variable.
+The app is a static site on [Vercel](https://vercel.com), connected to this repository, plus one
+Vercel Function. Every push to `main` updates the production site, and every other branch gets
+its own preview URL. Vercel detects the Vite setup and the `api/` folder on its own, so there is
+no `vercel.json`.
+
+The function `api/drive-times.ts` asks Mapbox for the driving times with typical traffic. Mapbox
+forbids storing these results, so they cannot be pre-computed like the routes (D29). It needs
+one environment variable in the Vercel project (Settings → Environment Variables, type Secret,
+for Production and Preview): `MAPBOX_TOKEN`, a Mapbox access token without URL restrictions.
+Without it, the rest of the app works and "Car by time of day" says the times are not available.
+For `npm run dev`, put `MAPBOX_TOKEN=…` in `.env.local`; the dev server then serves the function.
 
 Driving routes are pre-computed with OpenRouteService, so no API key ever reaches the browser. Two
 GitHub Actions keep the data fresh and commit only when something changed:
@@ -147,6 +159,7 @@ Hooks, branch `main`). For local runs, put `ORS_API_KEY=…` in `.env.local`, wh
 ## Project structure
 
 ```
+api/               Vercel Function: driving times with traffic (Mapbox)
 scripts/           data preparation (runs in Node, no build step)
 src/analysis/      the corridor check: LV95, SORA volumes, geometry, heights (unit-tested)
 src/components/    Vue components
@@ -154,6 +167,7 @@ src/composables/   app state (useCorridorCheck)
 src/config/        region, base maps, flight defaults, zone categories
 src/data/          curated sites, route file names, data loading
 src/map/           MapLibre overlay layers
+src/server/        the function's logic, unit-tested (runs on Vercel, never in the browser)
 src/types/         shared data types (also used by scripts/)
 public/data/       generated data: zones, border, routes (do not edit by hand)
 docs/              spike report, decision log, screenshots

@@ -33,18 +33,21 @@ estimated flight time with driving time on the road.
 - Phase 3 (accessibility, responsive layout, tests, docs) is merged into `main`.
 - UI cleanup (D25: visuals over prose, details on demand) is merged into `main`.
 - Production: https://basilink.vercel.app
-- 3D view (D27) and the matrix of all pairs (D28) are done. DE/FR zones are dropped (D26).
-- Next, only on the owner's request: the last stretch goal (traffic-dependent driving times)
-  and a test with real screen readers.
+- 3D view (D27) and the matrix of all pairs (D28) are merged into `main`. DE/FR zones are
+  dropped (D26).
+- Driving times with typical traffic (D29) are built on the branch `traffic-times`: a Vercel
+  Function asks Mapbox live, because Mapbox forbids storing results.
+- Next, only on the owner's request: a test with real screen readers.
 - Hosting: Vercel Hobby, connected to the GitHub repo (D21). `main` is production, every other
-  branch gets a preview URL. No environment variables on Vercel.
+  branch gets a preview URL. One environment variable on Vercel: `MAPBOX_TOKEN` (Secret).
 - The repo secrets `ORS_API_KEY` and `VERCEL_DEPLOY_HOOK_URL` are set and verified by the first
   route update on 2026-11-23 (bot commits deploy, see D21).
 - Open owner tasks:
   - regenerate the ORS key around 2026-11-30 (it was shown once in a session log), then update
     `.env.local` and the repo secret
   - confirm the ORS terms
-- `.env.local` holds `ORS_API_KEY=…`. Never print its content.
+- Open owner task: create the Mapbox token and set `MAPBOX_TOKEN` on Vercel (and in `.env.local`).
+- `.env.local` holds `ORS_API_KEY=…` and `MAPBOX_TOKEN=…`. Never print its content.
 
 ## Commands
 
@@ -71,9 +74,13 @@ A lower-case `d:\` makes every test fail with "reading 'config'" (vitest#5251).
 - Tests live next to the code as `*.test.ts` and run in the Node environment.
 - `public/data/` is generated. Never edit it by hand.
 - Build URLs to own files from `import.meta.env.BASE_URL`, never from `/`.
-- Secrets (e.g. `ORS_API_KEY`) are only used by scripts in GitHub Actions or from `.env.local`.
-  Never ship them to the browser, and never give a secret the `VITE_` prefix (Vite inlines those
-  into the bundle).
+- Secrets are only used by scripts in GitHub Actions (`ORS_API_KEY`), by the Vercel Function
+  (`MAPBOX_TOKEN`) or from `.env.local`. Never ship them to the browser, never log them, and never
+  give a secret the `VITE_` prefix (Vite inlines those into the bundle).
+- `api/` holds Vercel Functions; keep them thin and put the logic in `src/server/` with tests
+  (a test file inside `api/` would become a function). Code that Vercel compiles uses relative
+  imports ending in `.js`, because Vercel knows neither the `@/` alias nor `.ts` imports.
+- Mapbox results must not be stored or cached anywhere (D29).
 - UI copy is short. Prefer visuals (badges, bars, diagrams, icons) over prose, and put details in
   `<details>` (D25). Every visual still needs a text equivalent for screen readers.
 - Default parameters must follow regulation and the SORA 2.5 method (D17). Every number in the
@@ -92,6 +99,7 @@ A lower-case `d:\` makes every test fail with "reading 'config'" (vitest#5251).
 - MapLibre 6 needs its worker URL set explicitly. See `BaseMap.vue`.
 - Driving routes come from OpenRouteService, pre-computed for all site pairs by a script in
   GitHub Actions and stored in `public/data/` (D16). The browser never calls ORS.
+- Driving times with traffic come live from Mapbox through `api/drive-times.ts` (D29).
 - Lab-sample flights are BVLOS, so they belong to the specific category and need a FOCA
   authorisation. Defaults: 72 km/h, 80 m AGL, operational volume ±49.6 m and 0–115.4 m AGL,
   following SORA 2.5 Annex A (D17).

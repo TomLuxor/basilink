@@ -156,7 +156,8 @@ site list is fixed anyway (see D9), so:
 - Gains: no key exposure, no quota abuse, instant results, and the demo works even if ORS is down.
 - Cost: driving times exist only for listed sites, not for free points.
 - The traffic-dependent stretch goal still fits: pre-compute per time slot with a provider that
-  accepts a departure time.
+  accepts a departure time. _Not possible after all: the providers forbid storing their results.
+  The traffic times are asked live instead (D29)._
 - Attribution: "© openrouteservice.org by HeiGIT | Map data © OpenStreetMap contributors".
 - According to search results, ORS results are licensed CC BY 4.0. The terms page (now
   `account.heigit.org/info/tos`) could not be read automatically. _Open: the owner confirms the
@@ -394,3 +395,46 @@ Replaces the stretch goal "DE/FR zones".
   the same verdicts as before. The border check works the same way.
 - Turf polygon clipping is still used, but only for the map geometry of the selected pair (the
   part abroad, the zone slices of the 3D view).
+
+## 2026-11-23 – Last stretch goal
+
+### D29 Driving times with typical traffic, asked live from Mapbox
+
+Replaces the plan in D16 to pre-compute traffic times per time slot.
+
+- **Why not pre-computed:** the traffic-aware routing services forbid keeping their results.
+  - Mapbox Product Terms (20 October 2026), 2.10.1: "Customer shall not export, download, cache
+    or store results from any request to a Navigation API." Section 1.9 also rules out bulk or
+    automated queries; requests must answer a user's action.
+  - TomTom does not allow caching matrix results by default (TomTom developer forum). Its licence
+    text could not be read automatically.
+  - Google results may only be shown on a Google map (D9).
+  - Open data does not fit either. The federal transport model (ARE, NPVM 2017) has travel times
+    with congestion, but only as a daily average in 2.7 GB VISUM files. City-wide congestion
+    figures (TomTom Traffic Index) do not fit single routes, and the published values differ.
+- **How it works:** "Car by time of day" below the travel times asks the Vercel Function
+  `api/drive-times.ts` when it is opened, and again for each new pair while it stays open. The
+  function accepts listed site IDs only. It asks the Mapbox Directions API (profile
+  `driving-traffic`) for four departures: 07:30, 12:00, 17:30 and 22:00, Swiss time.
+- **Typical, not live traffic:** the day is the next Tuesday at least two days ahead. For such
+  departures Mapbox predicts from historical traffic; close to now it mixes in live traffic,
+  which would make the comparison depend on the moment of the click.
+- **Nothing is kept:** the function sends `Cache-Control: no-store`, and the app holds only the
+  current pair in memory.
+- **The token:** `MAPBOX_TOKEN` is a Vercel environment variable (type Secret, for Production and
+  Preview). Locally it goes into `.env.local`; `vite.config.ts` then serves the function during
+  `npm run dev`. Without a token the function answers 503 and the app says the times are not
+  available. The function's code is in `src/server/driveTimes.ts`, so it can be unit-tested.
+- **The main car time stays** the pre-computed openrouteservice route without traffic (D16), so
+  the result never depends on Mapbox. The Mapbox route line is not drawn. The two services route
+  differently, and the panel says so.
+- **Mapbox terms followed:**
+  - "Directions powered by" with the Mapbox logo next to the times (Product Terms 1.4.1 and the
+    attribution guide), and "© Mapbox" in the footer;
+  - the driving-directions policy of the Mapbox terms of service is disclosed: a short note
+    ("on the road, signs and traffic rules apply") with a link to the terms;
+  - Basilink is a demonstration, which the terms allow without an extra licence ("non-production
+    use", Product Terms 1.2.1). Real operational use would need a commercial licence.
+- **Cost:** four requests per opened pair. The free tier is about 100,000 directions requests
+  per month (Mapbox pricing, checked in Phase 0). A Mapbox account without a credit card cannot
+  cause costs; requests then fail when the trial limits are reached, and the app says so.
