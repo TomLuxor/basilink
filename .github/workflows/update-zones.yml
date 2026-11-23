@@ -1,15 +1,12 @@
 # Refreshes the FOCA (BAZL) drone restriction zones once a day.
 # The data script produces identical files when nothing changed, so a commit is only made
-# when FOCA actually published new data. The push then triggers a new deployment.
+# when FOCA actually published new data. In that case the site is redeployed.
 name: Update zone data
 
 on:
   schedule:
     - cron: '30 4 * * *' # daily at 04:30 UTC
   workflow_dispatch: # allows a manual run from the Actions tab
-
-permissions:
-  contents: write
 
 concurrency:
   group: update-zones
@@ -18,6 +15,10 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      changed: ${{ steps.commit.outputs.changed }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -28,9 +29,11 @@ jobs:
       - name: Download and prepare zones
         run: npm run data:zones
       - name: Commit if the data changed
+        id: commit
         run: |
           if git diff --quiet -- public/data; then
             echo "Zone data unchanged."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git config user.name "github-actions[bot]"
@@ -38,3 +41,14 @@ jobs:
           git add public/data
           git commit -m "data: update BAZL zones ($(node -p "require('./public/data/zones-meta.json').dataAsOf.slice(0, 10)"))"
           git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+  # Pushes made with GITHUB_TOKEN do not trigger the deploy workflow, so call it directly.
+  deploy:
+    needs: update
+    if: needs.update.outputs.changed == 'true'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/deploy.yml
