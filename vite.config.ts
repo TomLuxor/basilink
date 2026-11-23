@@ -12,4 +12,9 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  build: {
+    // MapLibre GL alone is ~1 MB minified (~300 KB gzipped). That is expected for a WebGL map
+    // library, so the default 500 kB warning would only be noise.
+    chunkSizeWarningLimit: 1300,
+  },
 })
