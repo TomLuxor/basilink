@@ -33,9 +33,10 @@ estimated flight time with driving time on the road.
   Phase 3 wait for the owner's OK.**
 - Hosting: Vercel Hobby, connected to the GitHub repo (D21). `main` is production, every other
   branch gets a preview URL. No environment variables on Vercel.
+- The repo secrets `ORS_API_KEY` and `VERCEL_DEPLOY_HOOK_URL` are set (2026-11-23).
 - Open owner tasks:
-  - regenerate the ORS key (it was shown once in a session log), then update `.env.local`
-  - add the repo secrets `ORS_API_KEY` and `VERCEL_DEPLOY_HOOK_URL`
+  - regenerate the ORS key around 2026-11-30 (it was shown once in a session log), then update
+    `.env.local` and the repo secret
   - after the first data commit by `github-actions[bot]`, check that the deploy hook made it live
   - confirm the ORS terms
 - `.env.local` holds `ORS_API_KEY=…`. Never print its content.
