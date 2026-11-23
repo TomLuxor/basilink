@@ -31,6 +31,7 @@ estimated flight time with driving time on the road.
 - Phase 1 (setup) is merged into `main` (repo: github.com/TomLuxor/basilink).
 - Phase 2 (MVP features 1–7) is merged into `main`.
 - Phase 3 (accessibility, responsive layout, tests, docs) is merged into `main`.
+- UI cleanup (D25: visuals over prose, details on demand) is merged into `main`.
 - Production: https://basilink.vercel.app
 - Next, only on the owner's request: stretch goals (3D view, traffic-light matrix of all pairs,
   DE/FR zones, traffic-dependent driving times) and a test with real screen readers.
