@@ -275,9 +275,12 @@ Supersedes D15. The owner connected the repository to Vercel (Hobby plan).
   commits triggering deployments"). Data commits by `github-actions[bot]` are therefore expected
   not to deploy. After a data commit, the update workflows call a Vercel deploy hook (repository
   secret `VERCEL_DEPLOY_HOOK_URL`). The hook builds the latest commit on `main`.
-- The Vercel docs do not say whether a deploy hook skips the commit author check. _To verify at
-  the first data commit by the bot._ Without the secret, the workflow only warns, and the new data
-  goes live with the next deployment.
+- Without the secret, the workflow only warns, and the new data goes live with the next
+  deployment.
+- Observed on 2026-11-23 (first route update, commit `4b082b5` by the bot): Vercel deployed the
+  commit twice, once through the Git integration and once through the hook. Bot commits are
+  therefore not blocked on this account, despite the KB article. The hook stays as a safety net,
+  because the documented rule may still apply; the price is one extra build per data update.
 
 ## 2026-11-23 – Phase 3
 
