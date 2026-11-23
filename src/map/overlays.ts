@@ -44,8 +44,11 @@ const ZONE_LAYERS = ['basilink-zones-fill', 'basilink-zones-line']
 /** Layers of the 3D view, hidden in the top view. */
 const LAYERS_3D = ['basilink-zones-3d', 'basilink-operational-3d', 'basilink-flight-3d']
 
-/** In 3D, zones without an upper limit are drawn up to this height above ground. */
-export const ZONE_3D_CEILING_M = 300
+/**
+ * In 3D, zones are cut this far above the checked volume. Higher up they do not matter for the
+ * corridor, and tall blocks (the airport and control zones have no upper limit) would hide it.
+ */
+export const ZONE_3D_HEADROOM_M = 50
 
 /**
  * In 3D, heights are drawn this many times taller. A corridor is about 100 m high but several
@@ -188,8 +191,8 @@ export function addOverlays(map: MapLibreMap) {
     layout: { visibility: 'none' },
     paint: {
       'fill-extrusion-color': zoneColour,
-      'fill-extrusion-base': exaggerated(['get', 'lowerLimitM']),
-      'fill-extrusion-height': exaggerated(['coalesce', ['get', 'upperLimitM'], ZONE_3D_CEILING_M]),
+      'fill-extrusion-base': exaggerated(['get', 'base']),
+      'fill-extrusion-height': exaggerated(['get', 'top']),
       'fill-extrusion-opacity': 0.4,
     },
   })
@@ -310,18 +313,21 @@ export function showCorridor(
     map.setFilter('basilink-zones-passed', zoneFilter(ids(['passes-below', 'passes-above'])))
   }
 
-  // 3D: only zones whose limits are both above ground can stand on the flat ground.
+  // 3D: only zones whose limits are both above ground can stand on the flat ground. Each zone is
+  // cut at the ceiling, a little above the checked volume.
+  const ceiling = analysis ? analysis.volumes.contingencyTopM + ZONE_3D_HEADROOM_M : 0
   setData(map, SOURCE.zoneSlices, {
     type: 'FeatureCollection',
     features: (analysis?.zoneSlices ?? [])
       .filter(({ zone }) => zone.lowerReference === 'AGL' && zone.upperReference === 'AGL')
+      .filter(({ zone }) => zone.lowerLimitM < ceiling)
       .map(({ zone, geometry }) => ({
         type: 'Feature',
         geometry,
         properties: {
           category: zone.category,
-          lowerLimitM: zone.lowerLimitM,
-          upperLimitM: zone.upperLimitM,
+          base: zone.lowerLimitM,
+          top: Math.min(zone.upperLimitM ?? Infinity, ceiling),
         },
       })),
   })
