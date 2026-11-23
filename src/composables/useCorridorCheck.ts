@@ -4,8 +4,16 @@
  */
 import { computed, ref, shallowRef, watch } from 'vue'
 import type { Feature, FeatureCollection, LineString, Polygon } from 'geojson'
-import { analyseCorridor, prepareArea, prepareZones, type PreparedZone } from '@/analysis/analyse'
+import {
+  analyseCorridor,
+  checkCorridor,
+  prepareArea,
+  prepareZones,
+  type PreparedZone,
+} from '@/analysis/analyse'
+import type { Lv95Polygon } from '@/analysis/lv95'
 import { computeVolumes } from '@/analysis/sora'
+import { trafficLight } from '@/analysis/trafficLight'
 import type { TerrainRange } from '@/analysis/vertical'
 import {
   DEFAULT_FLIGHT_PARAMETERS,
@@ -30,7 +38,7 @@ export function useCorridorCheck() {
   const zoneMeta = shallowRef<ZoneDataMeta | null>(null)
   const routeIndex = shallowRef<RouteIndex | null>(null)
   const preparedZones = shallowRef<PreparedZone[] | null>(null)
-  const switzerland = shallowRef<Polygon[] | undefined>(undefined)
+  const switzerland = shallowRef<Lv95Polygon[] | undefined>(undefined)
   const loadError = ref<string | null>(null)
 
   async function load() {
@@ -90,9 +98,38 @@ export function useCorridorCheck() {
     ;[fromId.value, toId.value] = [toId.value, fromId.value]
   }
 
+  /** From the pair matrix: sets start and destination at once. */
+  function selectPair(from: string, to: string) {
+    fromId.value = from
+    toId.value = to
+  }
+
   function resetParameters() {
     parameters.value = { ...DEFAULT_FLIGHT_PARAMETERS }
   }
+
+  /**
+   * Traffic light of every site pair for the matrix: `pairLights[i][j]` for SITES[i] and
+   * SITES[j], j < i (the corridor is the same in both directions). It uses the current
+   * parameters. Vue computes it only while the matrix reads it, in about 60 ms.
+   */
+  const pairLights = computed(() => {
+    const zoneList = preparedZones.value
+    if (!zoneList) return null
+    return SITES.map((a, i) =>
+      SITES.slice(0, i).map((b) =>
+        trafficLight(
+          checkCorridor({
+            from: a.position,
+            to: b.position,
+            parameters: validParameters.value,
+            zones: zoneList,
+            switzerland: switzerland.value,
+          }),
+        ),
+      ),
+    )
+  })
 
   // --- Terrain heights, fetched only when a zone has limits above sea level ---
   const terrain = shallowRef<{ key: string; range: TerrainRange } | null>(null)
@@ -157,7 +194,9 @@ export function useCorridorCheck() {
     terrainError,
     routeSummary,
     routeGeometry,
+    pairLights,
     selectFromMap,
+    selectPair,
     setFrom,
     setTo,
     swap,
