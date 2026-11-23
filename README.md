@@ -62,18 +62,21 @@ published new data.
 
 ## Deployment
 
-The app is a static site on GitHub Pages. `.github/workflows/deploy.yml` builds and publishes on
-every push to `main`. One-time setup: repository Settings → Pages → Source: "GitHub Actions".
+The app is a static site on [Vercel](https://vercel.com), connected to this repository. Every push
+to `main` updates the production site, and every other branch gets its own preview URL. Vercel
+detects the Vite setup on its own, so there is no `vercel.json` and no environment variable.
 
-To build locally under a sub-path like on Pages:
+Driving routes are pre-computed with OpenRouteService, so no API key ever reaches the browser. Two
+GitHub Actions keep the data fresh and commit only when something changed:
 
-```sh
-BASE_PATH=/basilink npm run build && BASE_PATH=/basilink npx vite preview   # then open /basilink/
-```
+| Workflow            | Runs    | Repository secrets                      |
+| ------------------- | ------- | --------------------------------------- |
+| `update-zones.yml`  | daily   | `VERCEL_DEPLOY_HOOK_URL`                |
+| `update-routes.yml` | monthly | `ORS_API_KEY`, `VERCEL_DEPLOY_HOOK_URL` |
 
-Driving routes are pre-computed with OpenRouteService, so no API key ever reaches the browser.
-`.github/workflows/update-routes.yml` refreshes them monthly and needs the repository secret
-`ORS_API_KEY`. For local runs, put `ORS_API_KEY=…` in `.env.local`, which is git-ignored.
+On the Vercel Hobby plan, only commits by the account owner deploy on their own. That is why the
+workflows call a Vercel deploy hook after a data commit (Vercel project → Settings → Git → Deploy
+Hooks, branch `main`). For local runs, put `ORS_API_KEY=…` in `.env.local`, which is git-ignored.
 
 ## Project structure
 

@@ -6,9 +6,6 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  // GitHub Pages serves a project site under "/<repo>/". The deploy workflow passes that path
-  // as BASE_PATH (e.g. "/basilink", or "" with a custom domain). Locally the app runs at "/".
-  base: `${process.env.BASE_PATH ?? ''}/`,
   plugins: [vue(), tailwindcss()],
   resolve: {
     alias: {

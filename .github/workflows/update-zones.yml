@@ -1,6 +1,6 @@
 # Refreshes the FOCA (BAZL) drone restriction zones once a day.
 # The data script produces identical files when nothing changed, so a commit is only made
-# when FOCA actually published new data. In that case the site is redeployed.
+# when FOCA actually published new data. In that case the site is redeployed on Vercel.
 name: Update zone data
 
 on:
@@ -17,8 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    outputs:
-      changed: ${{ steps.commit.outputs.changed }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -33,7 +31,6 @@ jobs:
         run: |
           if git diff --quiet -- public/data; then
             echo "Zone data unchanged."
-            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git config user.name "github-actions[bot]"
@@ -42,13 +39,15 @@ jobs:
           git commit -m "data: update BAZL zones ($(node -p "require('./public/data/zones-meta.json').dataAsOf.slice(0, 10)"))"
           git push
           echo "changed=true" >> "$GITHUB_OUTPUT"
-
-  # Pushes made with GITHUB_TOKEN do not trigger the deploy workflow, so call it directly.
-  deploy:
-    needs: update
-    if: needs.update.outputs.changed == 'true'
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    uses: ./.github/workflows/deploy.yml
+      # On the Vercel Hobby plan, only commits by the account owner deploy on their own, so a commit
+      # by github-actions[bot] needs the deploy hook. It builds the latest commit on main (D21).
+      - name: Deploy on Vercel
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$VERCEL_DEPLOY_HOOK_URL" ]; then
+            echo "::warning::Secret VERCEL_DEPLOY_HOOK_URL is missing. The new data goes live with the next deployment."
+            exit 0
+          fi
+          curl --fail --silent --show-error --request POST "$VERCEL_DEPLOY_HOOK_URL"

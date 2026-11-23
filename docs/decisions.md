@@ -129,6 +129,8 @@ pending; the domain looked unregistered on 2026-11-23.
 
 ### D15 Hosting: GitHub Pages, no custom domain for now
 
+_Superseded by D21 (Vercel)._
+
 - `.github/workflows/deploy.yml` builds and publishes on every push to `main`.
 - The site lives under `/<repo>/`. `actions/configure-pages` provides that path, and the build
   reads it as `BASE_PATH`. With a custom domain it becomes empty again, without code changes.
@@ -254,3 +256,25 @@ flights between hospitals. Primary source: matternet.com/our-system-aircraft.
   - Unilabs Basel (cytology and pathology)
 - Positions of the labs come from the geo.admin address search.
 - No open data set of medical labs was found.
+
+## 2026-11-23 – Owner changes after Phase 2
+
+### D21 Hosting: Vercel instead of GitHub Pages
+
+Supersedes D15. The owner connected the repository to Vercel (Hobby plan).
+
+- Vercel builds every push: `main` is the production site, every other branch gets a preview URL.
+  It detects the Vite setup on its own (`npm run build`, output `dist/`), so there is no
+  `vercel.json`.
+- The site lives at the domain root. The `BASE_PATH` setting and the Pages workflow are gone.
+  App code still builds its own URLs from `import.meta.env.BASE_URL`.
+- There is still no server code, so D16 stands: routes stay pre-computed and Vercel needs no
+  environment variables. A secret must never get the `VITE_` prefix, because Vite inlines such
+  variables into the browser bundle.
+- On the Hobby plan, "only the account owner can trigger deployments" (Vercel KB, "Why aren't
+  commits triggering deployments"). Data commits by `github-actions[bot]` are therefore expected
+  not to deploy. After a data commit, the update workflows call a Vercel deploy hook (repository
+  secret `VERCEL_DEPLOY_HOOK_URL`). The hook builds the latest commit on `main`.
+- The Vercel docs do not say whether a deploy hook skips the commit author check. _To verify at
+  the first data commit by the bot._ Without the secret, the workflow only warns, and the new data
+  goes live with the next deployment.

@@ -1,6 +1,6 @@
 /**
  * Loading the static data files from public/data/ and the terrain profile from geo.admin.
- * All own files are fetched relative to the base URL ("/" locally, "/<repo>/" on GitHub Pages).
+ * All own files are fetched relative to Vite's base URL, so the app also works under a sub-path.
  */
 import type { Feature, FeatureCollection, LineString, MultiPolygon, Polygon } from 'geojson'
 import type { Lv95Point } from '@/analysis/lv95'
