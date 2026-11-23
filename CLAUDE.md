@@ -34,7 +34,8 @@ estimated flight time with driving time on the road.
 - UI cleanup (D25: visuals over prose, details on demand) is merged into `main`.
 - Production: https://basilink.vercel.app
 - Next, only on the owner's request: stretch goals (3D view, traffic-light matrix of all pairs,
-  DE/FR zones, traffic-dependent driving times) and a test with real screen readers.
+  traffic-dependent driving times) and a test with real screen readers. DE/FR zones are dropped
+  (D26).
 - Hosting: Vercel Hobby, connected to the GitHub repo (D21). `main` is production, every other
   branch gets a preview URL. No environment variables on Vercel.
 - The repo secrets `ORS_API_KEY` and `VERCEL_DEPLOY_HOOK_URL` are set and verified by the first

@@ -23,6 +23,8 @@ export const CORRIDOR_COLOURS = {
   operationalVolume: '#ca8a04',
   groundRiskBuffer: '#dc2626',
   route: '#1d4ed8',
+  /** Part of the corridor outside Switzerland: darkened, because the check does not cover it. */
+  abroad: '#0f172a',
 }
 
 export const SITE_COLOURS = { hospital: '#0f766e', lab: '#7c3aed' }
@@ -120,6 +122,24 @@ export function addOverlays(map: MapLibreMap) {
     source: SOURCE.corridor,
     filter: isPart('operational-volume'),
     paint: { 'line-color': CORRIDOR_COLOURS.operationalVolume, 'line-width': 1.5 },
+  })
+  map.addLayer({
+    id: 'basilink-abroad-fill',
+    type: 'fill',
+    source: SOURCE.corridor,
+    filter: isPart('abroad'),
+    paint: { 'fill-color': CORRIDOR_COLOURS.abroad, 'fill-opacity': 0.35 },
+  })
+  map.addLayer({
+    id: 'basilink-abroad-line',
+    type: 'line',
+    source: SOURCE.corridor,
+    filter: isPart('abroad'),
+    paint: {
+      'line-color': CORRIDOR_COLOURS.abroad,
+      'line-width': 2,
+      'line-dasharray': [1.5, 1],
+    },
   })
   map.addLayer({
     id: 'basilink-flight-line',
@@ -240,6 +260,15 @@ export function showCorridor(
               properties: { part: 'operational-volume' },
               geometry: analysis.operationalVolume,
             },
+            ...(analysis.abroad
+              ? [
+                  {
+                    type: 'Feature' as const,
+                    properties: { part: 'abroad' },
+                    geometry: analysis.abroad,
+                  },
+                ]
+              : []),
             {
               type: 'Feature',
               properties: { part: 'line' },

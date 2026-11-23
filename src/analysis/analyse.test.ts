@@ -166,6 +166,27 @@ describe('analyseCorridor', () => {
     expect(analyse([], { switzerland: tooSmall }).leavesSwitzerland).toBe(true)
     expect(analyse([]).leavesSwitzerland).toBeNull()
   })
+
+  it('returns the part of the corridor outside Switzerland for the map', () => {
+    const inside = prepareArea({
+      type: 'Polygon',
+      coordinates: [rectangle(-1000, -1000, 3000, 1000)],
+    })
+    // Swiss territory ends 1500 m along the 2000 m flight.
+    const endsEarly = prepareArea({
+      type: 'Polygon',
+      coordinates: [rectangle(-1000, -1000, 1500, 1000)],
+    })
+    expect(analyse([], { switzerland: inside }).abroad).toBeNull()
+
+    const abroad = analyse([], { switzerland: endsEarly }).abroad
+    expect(abroad?.type).toBe('Polygon')
+    // Everything abroad lies beyond the border at 1500 m (with 1 m tolerance for rounding).
+    const border = toWgs84([START[0] + 1499, START[1]])[0]
+    const ring = abroad?.type === 'Polygon' ? abroad.coordinates[0]! : []
+    expect(ring.length).toBeGreaterThan(3)
+    for (const [lon] of ring) expect(lon).toBeGreaterThan(border)
+  })
 })
 
 describe('groupByCategory', () => {
