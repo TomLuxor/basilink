@@ -28,6 +28,9 @@ jobs:
         run: npm run data:routes
         env:
           ORS_API_KEY: ${{ secrets.ORS_API_KEY }}
+      # A broken data update must not reach the site (see src/data/data.test.ts).
+      - name: Unit tests with the new data
+        run: npm test
       - name: Commit if the routes changed
         id: commit
         run: |

@@ -26,6 +26,9 @@ jobs:
       - run: npm ci
       - name: Download and prepare zones
         run: npm run data:zones
+      # A broken data update must not reach the site (see src/data/data.test.ts).
+      - name: Unit tests with the new data
+        run: npm test
       - name: Commit if the data changed
         id: commit
         run: |
