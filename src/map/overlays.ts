@@ -167,6 +167,8 @@ export function addOverlays(map: MapLibreMap) {
       'text-anchor': 'top',
       'text-offset': [0, 1],
       'text-optional': true,
+      // When labels collide, start and destination win (lower sort key = placed first).
+      'symbol-sort-key': ['case', ['==', ['get', 'role'], ''], 1, 0],
     },
     paint: { 'text-color': '#0f172a', 'text-halo-color': '#ffffff', 'text-halo-width': 1.5 },
   })

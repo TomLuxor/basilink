@@ -16,8 +16,8 @@ export default defineConfig({
     },
   },
   build: {
-    // MapLibre GL alone is ~1 MB minified (~300 KB gzipped). That is expected for a WebGL map
-    // library, so the default 500 kB warning would only be noise.
-    chunkSizeWarningLimit: 1300,
+    // MapLibre GL is ~1 MB minified, proj4 and the Turf modules add ~0.2 MB (together ~390 KB
+    // gzipped). That is expected for a WebGL map app, so the default 500 kB warning is only noise.
+    chunkSizeWarningLimit: 1500,
   },
 })
