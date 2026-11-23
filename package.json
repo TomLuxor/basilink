@@ -16,7 +16,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "data:zones": "node scripts/fetch-zones.ts",
-    "data:border": "node scripts/fetch-border.ts"
+    "data:border": "node scripts/fetch-border.ts",
+    "data:routes": "node --env-file-if-exists=.env.local scripts/fetch-routes.ts"
   },
   "dependencies": {
     "@turf/boolean-intersects": "^7.4.0",

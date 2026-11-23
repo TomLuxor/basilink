@@ -17,7 +17,7 @@ import type {
   ZoneFeature,
   ZoneProperties,
 } from '../../src/types/zone.ts'
-import { roundRing } from '../lib/geometry.ts'
+import { roundPositions } from '../lib/geometry.ts'
 
 // --- Input: the part of the ED-269 format (version 1.0) that we use ---
 
@@ -169,7 +169,7 @@ export function toZoneFeatures(collection: Ed269Collection, region: BBox): ZoneF
 /** Reduces file size: drops detail below ~1 m and rounds coordinates to ~0.1 m. */
 export function simplifyZone(zone: ZoneFeature): ZoneFeature {
   const simplified = simplify(zone, { tolerance: SIMPLIFY_TOLERANCE_DEG, mutate: false })
-  const coordinates = simplified.geometry.coordinates.map((ring) => roundRing(ring))
+  const coordinates = simplified.geometry.coordinates.map((ring) => roundPositions(ring))
   if (coordinates.some((ring) => ring.length < 4)) {
     throw new Error(`zone ${zone.properties.id}: ring collapsed during simplification`)
   }

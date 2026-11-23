@@ -11,7 +11,7 @@ import bboxClip from '@turf/bbox-clip'
 import simplify from '@turf/simplify'
 import type { Feature, MultiPolygon, Polygon } from 'geojson'
 import { MAP_MAX_BOUNDS } from '../src/config/region.ts'
-import { roundRing } from './lib/geometry.ts'
+import { roundPositions } from './lib/geometry.ts'
 
 const SOURCE_URL =
   'https://api3.geo.admin.ch/rest/services/api/MapServer/ch.swisstopo.swissboundaries3d-land-flaeche.fill/CH?geometryFormat=geojson&sr=4326'
@@ -34,7 +34,7 @@ const parts = geometry.type === 'Polygon' ? [geometry.coordinates] : geometry.co
 
 // Clipping can leave empty or degenerate rings at the edge of the box; drop them.
 const coordinates = parts
-  .map((rings) => rings.map((ring) => roundRing(ring)).filter((ring) => ring.length >= 4))
+  .map((rings) => rings.map((ring) => roundPositions(ring)).filter((ring) => ring.length >= 4))
   .filter((rings) => rings.length > 0)
 
 const output: Feature<MultiPolygon> = {
