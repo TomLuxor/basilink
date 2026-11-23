@@ -20,6 +20,7 @@
     "data:routes": "node --env-file-if-exists=.env.local scripts/fetch-routes.ts"
   },
   "dependencies": {
+    "@lucide/vue": "1.70.0",
     "@turf/boolean-intersects": "^7.4.0",
     "@turf/boolean-within": "^7.4.0",
     "maplibre-gl": "^6.19.0",
