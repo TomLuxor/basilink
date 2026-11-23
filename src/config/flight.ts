@@ -25,6 +25,28 @@ export const DEFAULT_FLIGHT_PARAMETERS: FlightParameters = {
   extraVerticalM: 0,
 }
 
+/** Accepted input range per parameter; values outside fall back to the default. */
+export const PARAMETER_LIMITS: Record<keyof FlightParameters, { min: number; max: number }> = {
+  cruiseSpeedKmh: { min: 10, max: 150 },
+  flightAltitudeM: { min: 10, max: 300 },
+  characteristicDimensionM: { min: 0.2, max: 5 },
+  extraHorizontalM: { min: 0, max: 500 },
+  extraVerticalM: { min: 0, max: 200 },
+}
+
+/** Replaces empty or out-of-range inputs with the default, so the analysis never sees NaN. */
+export function sanitizeParameters(input: FlightParameters): FlightParameters {
+  const result = { ...input }
+  for (const key of Object.keys(PARAMETER_LIMITS) as (keyof FlightParameters)[]) {
+    const { min, max } = PARAMETER_LIMITS[key]
+    const value = input[key]
+    const valid =
+      typeof value === 'number' && Number.isFinite(value) && value >= min && value <= max
+    if (!valid) result[key] = DEFAULT_FLIGHT_PARAMETERS[key]
+  }
+  return result
+}
+
 /** The drone the speed and mass assumptions are based on. */
 export const REFERENCE_AIRCRAFT = {
   name: 'Matternet M3',

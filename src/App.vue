@@ -3,9 +3,18 @@ import { ref } from 'vue'
 import BaseMap from '@/components/BaseMap.vue'
 import BasemapSwitcher from '@/components/BasemapSwitcher.vue'
 import DataSources from '@/components/DataSources.vue'
+import FlightAssumptions from '@/components/FlightAssumptions.vue'
+import MapLegend from '@/components/MapLegend.vue'
+import PairSelect from '@/components/PairSelect.vue'
+import ResultPanel from '@/components/ResultPanel.vue'
+import SiteList from '@/components/SiteList.vue'
+import { useCorridorCheck } from '@/composables/useCorridorCheck'
 import type { BasemapId } from '@/config/basemaps'
 
+const check = useCorridorCheck()
+const { parameters } = check
 const basemap = ref<BasemapId>('light')
+const zonesVisible = ref(true)
 </script>
 
 <template>
@@ -18,7 +27,7 @@ const basemap = ref<BasemapId>('light')
     <main class="flex flex-1 flex-col md:min-h-0 md:flex-row">
       <section
         aria-label="Corridor check"
-        class="space-y-6 border-slate-200 p-4 md:w-96 md:shrink-0 md:overflow-y-auto md:border-r"
+        class="space-y-6 border-slate-200 p-4 md:w-104 md:shrink-0 md:overflow-y-auto md:border-r"
       >
         <p
           role="note"
@@ -27,15 +36,57 @@ const basemap = ref<BasemapId>('light')
           <strong>Pre-check only.</strong> Basilink does not replace an authorisation from FOCA or
           any other competent authority. Temporary restrictions (DABS/NOTAM) are not included.
         </p>
-        <p>
-          Basilink checks whether a direct drone corridor between a hospital and a lab crosses
-          official drone restriction zones, and compares the flight time with the driving time.
-        </p>
-        <DataSources />
+
+        <PairSelect
+          :sites="check.sites"
+          :from-id="check.fromId.value"
+          :to-id="check.toId.value"
+          @set-from="check.setFrom"
+          @set-to="check.setTo"
+          @swap="check.swap"
+        />
+
+        <ResultPanel
+          :analysis="check.analysis.value"
+          :from="check.from.value"
+          :to="check.to.value"
+          :route-summary="check.routeSummary.value"
+          :route-index="check.routeIndex.value"
+          :terrain-error="check.terrainError.value"
+          :load-error="check.loadError.value"
+        />
+
+        <FlightAssumptions
+          v-model="parameters"
+          :volumes="check.volumes.value"
+          @reset="check.resetParameters"
+        />
+
+        <MapLegend v-model:zones-visible="zonesVisible" />
+
+        <SiteList
+          :sites="check.sites"
+          :from-id="check.fromId.value"
+          :to-id="check.toId.value"
+          @set-from="check.setFrom"
+          @set-to="check.setTo"
+        />
+
+        <DataSources :meta="check.zoneMeta.value" :route-index="check.routeIndex.value" />
       </section>
 
       <section aria-label="Map" class="relative h-[60vh] md:h-auto md:flex-1">
-        <BaseMap :basemap="basemap" />
+        <BaseMap
+          :basemap="basemap"
+          :zones="check.zones.value"
+          :zones-visible="zonesVisible"
+          :sites="check.sites"
+          :from-id="check.fromId.value"
+          :to-id="check.toId.value"
+          :analysis="check.analysis.value"
+          :route="check.routeGeometry.value"
+          @select-site="check.selectFromMap"
+        />
         <div class="absolute top-3 left-3">
           <BasemapSwitcher v-model="basemap" />
         </div>
