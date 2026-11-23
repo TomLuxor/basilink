@@ -1,72 +1,77 @@
 <script setup lang="ts">
-/** Layer switch for the restriction zones and the legend of everything drawn on the map. */
+/** Map overlay: switch for the restriction zones and the legend of everything drawn on the map. */
+import { ChevronDown, Layers } from '@lucide/vue'
 import { ZONE_CATEGORIES, ZONE_CATEGORY_ORDER } from '@/config/zoneCategories'
 import { CORRIDOR_COLOURS, SITE_COLOURS } from '@/map/overlays'
 
 const zonesVisible = defineModel<boolean>('zonesVisible', { required: true })
 
 const corridorItems = [
-  { label: 'Direct flight line', colour: CORRIDOR_COLOURS.line, shape: 'line' },
-  {
-    label: 'Checked operational volume',
-    colour: CORRIDOR_COLOURS.operationalVolume,
-    shape: 'area',
-  },
+  { label: 'Flight line', colour: CORRIDOR_COLOURS.line, shape: 'line' },
+  { label: 'Checked volume', colour: CORRIDOR_COLOURS.operationalVolume, shape: 'area' },
   { label: 'Ground risk buffer', colour: CORRIDOR_COLOURS.groundRiskBuffer, shape: 'dashed' },
   { label: 'Road route', colour: CORRIDOR_COLOURS.route, shape: 'line' },
+  { label: 'Zone in conflict', colour: '#0f172a', shape: 'thick' },
+  { label: 'Zone passed below', colour: '#0f172a', shape: 'dashed' },
   { label: 'Hospital', colour: SITE_COLOURS.hospital, shape: 'dot' },
   { label: 'Laboratory', colour: SITE_COLOURS.lab, shape: 'dot' },
 ]
 </script>
 
 <template>
-  <section aria-labelledby="legend-title" class="space-y-2 text-sm">
-    <h2 id="legend-title" class="text-lg font-semibold">Map legend</h2>
-    <label class="flex items-center gap-2 font-medium">
-      <input v-model="zonesVisible" type="checkbox" class="size-4 accent-slate-800" />
-      Show drone restriction zones (FOCA)
-    </label>
-    <ul class="grid grid-cols-1 gap-1 sm:grid-cols-2">
-      <li v-for="category in ZONE_CATEGORY_ORDER" :key="category" class="flex items-center gap-2">
-        <span
-          aria-hidden="true"
-          class="inline-block size-4 shrink-0 rounded-sm border-2"
-          :style="{
-            borderColor: ZONE_CATEGORIES[category].colour,
-            backgroundColor: `${ZONE_CATEGORIES[category].colour}33`,
-          }"
-        />
-        {{ ZONE_CATEGORIES[category].label }}
-      </li>
-    </ul>
-    <p class="text-slate-600">
-      Zones in the result have a thick outline (conflict) or a dashed outline (passed below).
-    </p>
-    <ul class="grid grid-cols-1 gap-1 sm:grid-cols-2">
-      <li v-for="item in corridorItems" :key="item.label" class="flex items-center gap-2">
-        <span
-          v-if="item.shape === 'dot'"
-          aria-hidden="true"
-          class="inline-block size-3.5 shrink-0 rounded-full border-2 border-white ring-1 ring-slate-400"
-          :style="{ backgroundColor: item.colour }"
-        />
-        <span
-          v-else-if="item.shape === 'area'"
-          aria-hidden="true"
-          class="inline-block h-3 w-5 shrink-0 border"
-          :style="{ borderColor: item.colour, backgroundColor: `${item.colour}55` }"
-        />
-        <span
-          v-else
-          aria-hidden="true"
-          class="inline-block w-5 shrink-0 border-t-[3px]"
-          :style="{
-            borderColor: item.colour,
-            borderTopStyle: item.shape === 'dashed' ? 'dashed' : 'solid',
-          }"
-        />
-        {{ item.label }}
-      </li>
-    </ul>
-  </section>
+  <details class="group w-max max-w-64 rounded-md bg-white text-sm shadow-md">
+    <summary
+      class="flex cursor-pointer list-none items-center gap-2 rounded-md px-3 py-1.5 font-medium text-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 [&::-webkit-details-marker]:hidden"
+    >
+      <Layers class="size-4" />
+      Legend
+      <ChevronDown
+        class="size-4 transition-transform group-open:rotate-180 motion-reduce:transition-none"
+      />
+    </summary>
+    <div class="max-h-[45svh] space-y-3 overflow-y-auto border-t border-slate-200 px-3 py-2">
+      <label class="flex items-center gap-2 font-medium">
+        <input v-model="zonesVisible" type="checkbox" class="size-4 accent-slate-800" />
+        Restriction zones
+      </label>
+      <ul class="space-y-1">
+        <li v-for="category in ZONE_CATEGORY_ORDER" :key="category" class="flex items-center gap-2">
+          <span
+            aria-hidden="true"
+            class="inline-block size-3.5 shrink-0 rounded-sm border-2"
+            :style="{
+              borderColor: ZONE_CATEGORIES[category].colour,
+              backgroundColor: `${ZONE_CATEGORIES[category].colour}33`,
+            }"
+          />
+          {{ ZONE_CATEGORIES[category].label }}
+        </li>
+      </ul>
+      <ul class="space-y-1 border-t border-slate-200 pt-2">
+        <li v-for="item in corridorItems" :key="item.label" class="flex items-center gap-2">
+          <span
+            v-if="item.shape === 'dot'"
+            aria-hidden="true"
+            class="inline-block size-3.5 shrink-0 rounded-full border-2 border-white ring-1 ring-slate-400"
+            :style="{ backgroundColor: item.colour }"
+          />
+          <span
+            v-else-if="item.shape === 'area'"
+            aria-hidden="true"
+            class="inline-block h-3 w-5 shrink-0 border"
+            :style="{ borderColor: item.colour, backgroundColor: `${item.colour}55` }"
+          />
+          <span
+            v-else
+            aria-hidden="true"
+            class="inline-block w-5 shrink-0"
+            :style="{
+              borderTop: `${item.shape === 'thick' ? 4 : 3}px ${item.shape === 'dashed' ? 'dashed' : 'solid'} ${item.colour}`,
+            }"
+          />
+          {{ item.label }}
+        </li>
+      </ul>
+    </div>
+  </details>
 </template>

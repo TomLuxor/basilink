@@ -1,5 +1,6 @@
 <script setup lang="ts">
 /** Start and destination as two native selects: fast, and fully usable with keyboard and screen readers. */
+import { ArrowUpDown } from '@lucide/vue'
 import type { Site } from '@/data/sites'
 
 defineProps<{ sites: Site[]; fromId: string | null; toId: string | null }>()
@@ -14,9 +15,9 @@ const valueOf = (event: Event) => (event.target as HTMLSelectElement).value || n
 </script>
 
 <template>
-  <section aria-labelledby="pair-title" class="space-y-3">
-    <h2 id="pair-title" class="text-lg font-semibold">Start and destination</h2>
-    <div class="flex items-end gap-2">
+  <section aria-labelledby="pair-title">
+    <h2 id="pair-title" class="sr-only">Start and destination</h2>
+    <div class="flex items-center gap-2">
       <div class="grid min-w-0 flex-1 gap-2">
         <label
           v-for="field in [
@@ -24,12 +25,12 @@ const valueOf = (event: Event) => (event.target as HTMLSelectElement).value || n
             { id: 'to', label: 'Destination', value: toId, other: fromId },
           ]"
           :key="field.id"
-          class="grid gap-1 text-sm font-medium"
+          class="grid gap-0.5 text-xs font-medium text-slate-700"
         >
           {{ field.label }}
           <select
             :value="field.value ?? ''"
-            class="w-full min-w-0 rounded-md border border-slate-500 bg-white px-2 py-1.5 text-base font-normal focus-visible:outline-2 focus-visible:outline-sky-600"
+            class="w-full min-w-0 rounded-md border border-slate-500 bg-white px-2 py-1.5 text-base font-normal text-slate-900 focus-visible:outline-2 focus-visible:outline-sky-600"
             @change="
               field.id === 'from'
                 ? emit('setFrom', valueOf($event))
@@ -52,17 +53,14 @@ const valueOf = (event: Event) => (event.target as HTMLSelectElement).value || n
       </div>
       <button
         type="button"
-        class="rounded-md border border-slate-500 bg-white px-3 py-1.5 text-sm font-medium hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-sky-600 disabled:opacity-50"
+        class="mt-4 rounded-md border border-slate-500 bg-white p-2 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-sky-600 disabled:opacity-50"
         :disabled="!fromId && !toId"
         aria-label="Swap start and destination"
         title="Swap start and destination"
         @click="emit('swap')"
       >
-        <span aria-hidden="true">⇅</span>
+        <ArrowUpDown class="size-4" />
       </button>
     </div>
-    <p class="text-sm text-slate-600">
-      Or click two sites on the map, or use the site list further down.
-    </p>
   </section>
 </template>
