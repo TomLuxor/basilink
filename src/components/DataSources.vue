@@ -8,7 +8,8 @@ const failed = ref(false)
 
 onMounted(async () => {
   try {
-    const response = await fetch('/data/zones-meta.json')
+    // BASE_URL is "/" locally and "/<repo>/" on GitHub Pages.
+    const response = await fetch(`${import.meta.env.BASE_URL}data/zones-meta.json`)
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
     meta.value = (await response.json()) as ZoneDataMeta
   } catch (error) {
