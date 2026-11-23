@@ -37,6 +37,21 @@ It keeps the zones around Basel, simplifies them and writes a static GeoJSON fil
 file with the "data as of" date. A GitHub Action runs it every day and commits only when FOCA
 published new data.
 
+## Deployment
+
+The app is a static site on GitHub Pages. `.github/workflows/deploy.yml` builds and publishes on
+every push to `main`. One-time setup: repository Settings → Pages → Source: "GitHub Actions".
+
+To build locally under a sub-path like on Pages:
+
+```sh
+BASE_PATH=/basilink npm run build && BASE_PATH=/basilink npx vite preview   # then open /basilink/
+```
+
+Driving routes will be pre-computed with OpenRouteService in a GitHub Action, so no API key ever
+reaches the browser. The key is stored as the repository secret `ORS_API_KEY`. For local runs,
+put it in `.env.local`, which is git-ignored.
+
 ## Project structure
 
 ```

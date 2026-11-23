@@ -30,11 +30,14 @@ estimated flight time with driving time on the road.
 - Phase 0 (spike) is done; see `docs/phase-0-spike.md`.
 - Phase 1 (setup) is done on branch `phase-1-setup`.
 - **Waiting for the owner's OK before Phase 2.**
+- Hosting is **GitHub Pages** without a custom domain for now (D15). There is no Vercel and no
+  server code.
 - Open owner tasks:
-  - create an OpenRouteService API key
-  - create a GitHub repo and add the remote
-  - set up a Vercel project
-  - register the `basilink.ch` domain
+  - create an OpenRouteService API key (HeiGIT account)
+  - create a public GitHub repo and add the remote
+  - enable Pages with source "GitHub Actions"
+  - add the repo secret `ORS_API_KEY`
+  - confirm the ORS terms
 
 ## Commands
 
@@ -58,6 +61,12 @@ A lower-case `d:\` makes every test fail with "reading 'config'" (vitest#5251).
 - `src/config/region.ts` and `src/types/zone.ts` are shared with `scripts/`. Keep them free of browser APIs.
 - Tests live next to the code as `*.test.ts` and run in the Node environment.
 - `public/data/` is generated. Never edit it by hand.
+- The site is served under `/<repo>/` on GitHub Pages. Build URLs to own files from
+  `import.meta.env.BASE_URL`, never from `/`.
+- Secrets (e.g. `ORS_API_KEY`) are only used by scripts in GitHub Actions or from `.env.local`.
+  Never ship them to the browser.
+- Default parameters must follow regulation and the SORA 2.5 method (D17). Every number in the
+  UI is labelled as an assumption and names its source.
 
 ## Key facts from the spike (details in docs/phase-0-spike.md)
 
@@ -70,5 +79,8 @@ A lower-case `d:\` makes every test fail with "reading 'config'" (vitest#5251).
 - geo.admin height/profile API accepts LV95/LV03 only, so proj4 is needed.
 - swisstopo vector basemap is blank abroad from zoom ~10. The aerial switch covers the EuroAirport.
 - MapLibre 6 needs its worker URL set explicitly. See `BaseMap.vue`.
-- Routing uses OpenRouteService behind a Vercel Function. The API key stays server-side, and only
-  location IDs are accepted.
+- Driving routes come from OpenRouteService, pre-computed for all site pairs by a script in
+  GitHub Actions and stored in `public/data/` (D16). The browser never calls ORS.
+- Lab-sample flights are BVLOS, so they belong to the specific category and need a FOCA
+  authorisation. Defaults: 72 km/h, 80 m AGL, operational volume ±49.6 m and 0–115.4 m AGL,
+  following SORA 2.5 Annex A (D17).
