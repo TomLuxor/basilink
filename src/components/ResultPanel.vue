@@ -9,6 +9,7 @@ import { groupByCategory, type CorridorAnalysis } from '@/analysis/analyse'
 import AuthorityList from '@/components/AuthorityList.vue'
 import TravelTimes from '@/components/TravelTimes.vue'
 import ZoneList from '@/components/ZoneList.vue'
+import type { DriveTimes } from '@/data/driveTimes'
 import type { RouteSummary } from '@/data/routes'
 import type { Site } from '@/data/sites'
 import { formatDuration } from '@/format'
@@ -18,9 +19,12 @@ const props = defineProps<{
   from: Site | null
   to: Site | null
   routeSummary: RouteSummary | null
+  driveTimes: DriveTimes | null
+  driveTimesError: boolean
   terrainError: boolean
   loadError: string | null
 }>()
+const trafficOpen = defineModel<boolean>('trafficOpen', { required: true })
 
 const findings = computed(() => props.analysis?.findings ?? [])
 /** Zones in the airspace of the corridor, air traffic first (see ZONE_CATEGORY_ORDER). */
@@ -103,10 +107,13 @@ const announcement = computed(() => {
       </div>
 
       <TravelTimes
+        v-model:traffic-open="trafficOpen"
         :flight-time-s="analysis.flightTimeS"
         :flight-distance-m="analysis.distanceM"
         :speed-kmh="Math.round(analysis.volumes.speedMs * 3.6)"
         :road="routeSummary"
+        :drive-times="driveTimes"
+        :drive-times-error="driveTimesError"
       />
 
       <p

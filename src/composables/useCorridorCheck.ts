@@ -20,7 +20,9 @@ import {
   sanitizeParameters,
   type FlightParameters,
 } from '@/config/flight'
+import type { DriveTimes } from '@/data/driveTimes'
 import {
+  loadDriveTimes,
   loadRouteGeometry,
   loadRouteIndex,
   loadSwitzerland,
@@ -178,6 +180,28 @@ export function useCorridorCheck() {
     }
   })
 
+  // --- Driving times with typical traffic: asked live, only while "By time of day" is open ---
+  const trafficOpen = ref(false)
+  /** Only the current pair is kept: Mapbox forbids storing its results (D29). */
+  const trafficResult = shallowRef<{ key: string; times: DriveTimes } | null>(null)
+  const driveTimesError = ref(false)
+  const driveTimes = computed(() =>
+    trafficResult.value?.key === pairKey.value ? trafficResult.value.times : null,
+  )
+
+  watch([pairKey, trafficOpen], async ([key, open]) => {
+    if (!open || !key || !from.value || !to.value || trafficResult.value?.key === key) return
+    trafficResult.value = null
+    driveTimesError.value = false
+    try {
+      const times = await loadDriveTimes(from.value.id, to.value.id)
+      if (pairKey.value === key) trafficResult.value = { key, times }
+    } catch (error) {
+      console.error(error)
+      if (pairKey.value === key) driveTimesError.value = true
+    }
+  })
+
   return {
     sites: SITES,
     zones,
@@ -194,6 +218,9 @@ export function useCorridorCheck() {
     terrainError,
     routeSummary,
     routeGeometry,
+    trafficOpen,
+    driveTimes,
+    driveTimesError,
     pairLights,
     selectFromMap,
     selectPair,

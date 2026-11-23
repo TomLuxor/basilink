@@ -1,11 +1,13 @@
 /**
- * Loading the static data files from public/data/ and the terrain profile from geo.admin.
- * All own files are fetched relative to Vite's base URL, so the app also works under a sub-path.
+ * Loading the static data files from public/data/, the traffic times from the own function and
+ * the terrain profile from geo.admin. All own URLs are relative to Vite's base URL, so the app
+ * also works under a sub-path.
  */
 import type { Feature, FeatureCollection, LineString, MultiPolygon, Polygon } from 'geojson'
 import type { Lv95Point } from '@/analysis/lv95'
 import type { TerrainRange } from '@/analysis/vertical'
 import type { ZoneDataMeta, ZoneProperties } from '@/types/zone'
+import { driveTimesPath, type DriveTimes } from './driveTimes'
 import { ROUTE_INDEX_PATH, routeGeometryPath, type RouteIndex } from './routes'
 
 async function getJson<T>(path: string): Promise<T> {
@@ -33,6 +35,10 @@ export async function loadRouteIndex(): Promise<RouteIndex | null> {
 
 export const loadRouteGeometry = (fromId: string, toId: string) =>
   getJson<Feature<LineString>>(routeGeometryPath(fromId, toId))
+
+/** Driving times with typical traffic, asked live from the Vercel Function (D29). */
+export const loadDriveTimes = (fromId: string, toId: string) =>
+  getJson<DriveTimes>(driveTimesPath(fromId, toId))
 
 /**
  * Lowest and highest terrain along the direct line, from the geo.admin profile service

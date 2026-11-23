@@ -22,6 +22,9 @@ const REPO_URL = 'https://github.com/TomLuxor/basilink'
       OpenStreetMap contributors<template v-if="routeIndex">
         ({{ formatDate(routeIndex.computedOn) }})</template
       >
+      · Times with traffic ©
+      <a href="https://www.mapbox.com/about/maps/" class="underline">Mapbox</a> (asked live, not
+      stored)
     </p>
     <p>
       <a :href="`${REPO_URL}/blob/main/DATA_SOURCES.md`" class="underline">Sources and licences</a>

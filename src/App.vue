@@ -15,7 +15,7 @@ import { useCorridorCheck } from '@/composables/useCorridorCheck'
 import type { BasemapId } from '@/config/basemaps'
 
 const check = useCorridorCheck()
-const { parameters } = check
+const { parameters, trafficOpen } = check
 const basemap = ref<BasemapId>('light')
 const zonesVisible = ref(true)
 const view3d = ref(false)
@@ -88,10 +88,13 @@ const matrixOpen = ref(false)
 
     <div class="min-w-0 space-y-6 p-4 md:border-r md:border-slate-200">
       <ResultPanel
+        v-model:traffic-open="trafficOpen"
         :analysis="check.analysis.value"
         :from="check.from.value"
         :to="check.to.value"
         :route-summary="check.routeSummary.value"
+        :drive-times="check.driveTimes.value"
+        :drive-times-error="check.driveTimesError.value"
         :terrain-error="check.terrainError.value"
         :load-error="check.loadError.value"
       />

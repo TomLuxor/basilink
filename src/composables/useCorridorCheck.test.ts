@@ -3,13 +3,23 @@
  * public/data/ through a fake fetch, and the tests drive it like the UI does.
  */
 import { readFile } from 'node:fs/promises'
-import { effectScope, type EffectScope } from 'vue'
+import { effectScope, nextTick, type EffectScope } from 'vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useCorridorCheck } from './useCorridorCheck'
 
-/** Serves the app's own files from public/ and refuses everything else (no network in tests). */
+/**
+ * Serves the app's own files from public/, answers for the traffic function, and refuses
+ * everything else (no network in tests).
+ */
 async function fakeFetch(input: string | URL | Request): Promise<Response> {
   const url = String(input)
+  if (url.startsWith('/api/drive-times')) {
+    return Response.json({
+      provider: 'test',
+      date: '2026-12-01',
+      times: [{ departure: '07:30', durationS: 900 }],
+    })
+  }
   if (!url.startsWith('/')) throw new Error(`No network in tests: ${url}`)
   const body = await readFile(new URL(`../../public${url}`, import.meta.url), 'utf8')
   return new Response(body, { headers: { 'Content-Type': 'application/json' } })
@@ -104,6 +114,29 @@ describe('corridor check with the real data', () => {
     expect(lights.map((row) => row.length)).toEqual(check.sites.map((_, i) => i))
     expect(lights[index('viollier-allschwil')]![index('usb')]).toBe('red')
     expect(lights[index('unilabs-basel')]![index('ksbl-bruderholz')]).toBe('green')
+  })
+
+  it('asks for traffic times only while they are shown, for the current pair', async () => {
+    const check = await setup()
+    const trafficCalls = () =>
+      vi
+        .mocked(fetch)
+        .mock.calls.map(([url]) => String(url))
+        .filter((url) => url.includes('api/drive-times'))
+    check.setFrom('usb')
+    check.setTo('ukbb')
+    await nextTick()
+    expect(trafficCalls()).toEqual([])
+
+    check.trafficOpen.value = true
+    await vi.waitFor(() => expect(check.driveTimes.value?.date).toBe('2026-12-01'))
+    check.setTo('bethesda')
+    expect(check.driveTimes.value).toBeNull()
+    await vi.waitFor(() => expect(check.driveTimes.value).not.toBeNull())
+    expect(trafficCalls()).toEqual([
+      '/api/drive-times?from=usb&to=ukbb',
+      '/api/drive-times?from=usb&to=bethesda',
+    ])
   })
 
   it('falls back to the default for an invalid parameter', async () => {
