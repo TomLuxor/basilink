@@ -15,7 +15,8 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "data:zones": "node scripts/fetch-zones.ts"
+    "data:zones": "node scripts/fetch-zones.ts",
+    "data:border": "node scripts/fetch-border.ts"
   },
   "dependencies": {
     "@turf/boolean-intersects": "^7.4.0",

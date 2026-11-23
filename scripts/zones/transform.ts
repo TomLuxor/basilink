@@ -17,6 +17,7 @@ import type {
   ZoneFeature,
   ZoneProperties,
 } from '../../src/types/zone.ts'
+import { roundRing } from '../lib/geometry.ts'
 
 // --- Input: the part of the ED-269 format (version 1.0) that we use ---
 
@@ -57,9 +58,6 @@ const METRES_PER_FOOT = 0.3048
  * every metre along curves; dropping detail below 1 m does not change any analysis result.
  */
 const SIMPLIFY_TOLERANCE_DEG = 0.00001
-
-/** 6 decimal places in WGS84 ≈ 0.1 m. */
-const COORDINATE_DECIMALS = 6
 
 // --- Small helpers ---
 
@@ -168,22 +166,10 @@ export function toZoneFeatures(collection: Ed269Collection, region: BBox): ZoneF
   return features.sort((a, b) => a.properties.id.localeCompare(b.properties.id))
 }
 
-/** Rounds coordinates and removes points that became duplicates through rounding. */
-function roundRing(ring: Position[]): Position[] {
-  const factor = 10 ** COORDINATE_DECIMALS
-  const rounded: Position[] = []
-  for (const [lon = NaN, lat = NaN] of ring) {
-    const point = [Math.round(lon * factor) / factor, Math.round(lat * factor) / factor]
-    const previous = rounded.at(-1)
-    if (!previous || previous[0] !== point[0] || previous[1] !== point[1]) rounded.push(point)
-  }
-  return rounded
-}
-
 /** Reduces file size: drops detail below ~1 m and rounds coordinates to ~0.1 m. */
 export function simplifyZone(zone: ZoneFeature): ZoneFeature {
   const simplified = simplify(zone, { tolerance: SIMPLIFY_TOLERANCE_DEG, mutate: false })
-  const coordinates = simplified.geometry.coordinates.map(roundRing)
+  const coordinates = simplified.geometry.coordinates.map((ring) => roundRing(ring))
   if (coordinates.some((ring) => ring.length < 4)) {
     throw new Error(`zone ${zone.properties.id}: ring collapsed during simplification`)
   }
