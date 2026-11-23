@@ -1,40 +1,40 @@
 <script setup lang="ts">
-/** Shows where the zone data comes from and how fresh it is (from public/data/zones-meta.json). */
-import { onMounted, ref } from 'vue'
+/** Where every piece of data comes from, how fresh it is, and the required attributions. */
+import type { RouteIndex } from '@/data/routes'
+import { formatDate } from '@/format'
 import type { ZoneDataMeta } from '@/types/zone'
 
-const meta = ref<ZoneDataMeta | null>(null)
-const failed = ref(false)
+defineProps<{ meta: ZoneDataMeta | null; routeIndex: RouteIndex | null }>()
 
-onMounted(async () => {
-  try {
-    // BASE_URL is "/" locally and "/<repo>/" on GitHub Pages.
-    const response = await fetch(`${import.meta.env.BASE_URL}data/zones-meta.json`)
-    if (!response.ok) throw new Error(`HTTP ${response.status}`)
-    meta.value = (await response.json()) as ZoneDataMeta
-  } catch (error) {
-    console.error('Could not load zone metadata', error)
-    failed.value = true
-  }
-})
-
-const formatDate = (iso: string) =>
-  new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'Europe/Zurich' }).format(
-    new Date(iso),
-  )
+const SORA_ANNEX_A =
+  'http://jarus-rpas.org/wp-content/uploads/2024/06/SORA-v2.5-Annex-A-Release.JAR_doc_26-pdf.pdf'
 </script>
 
 <template>
-  <section aria-labelledby="data-sources-title" class="text-sm text-slate-700">
-    <h2 id="data-sources-title" class="font-semibold text-slate-900">Data sources</h2>
-    <p v-if="meta">
-      Drone restriction zones:
-      <a :href="meta.sourceUrl" class="underline hover:text-slate-900">FOCA</a>, data as of
-      <time :datetime="meta.dataAsOf">{{ formatDate(meta.dataAsOf) }}</time
-      >, <a :href="meta.licenseUrl" class="underline hover:text-slate-900">{{ meta.license }}</a
-      >.
-    </p>
-    <p v-else-if="failed">The date of the zone data could not be loaded.</p>
-    <p>Base map: © swisstopo.</p>
+  <section aria-labelledby="data-sources-title" class="space-y-1 text-sm text-slate-700">
+    <h2 id="data-sources-title" class="text-lg font-semibold text-slate-900">Data sources</h2>
+    <ul class="list-disc space-y-1 pl-5">
+      <li v-if="meta">
+        Drone restriction zones:
+        <a :href="meta.sourceUrl" class="underline">FOCA</a>, data as of
+        <time :datetime="meta.dataAsOf">{{ formatDate(meta.dataAsOf) }}</time
+        >, <a :href="meta.licenseUrl" class="underline">{{ meta.license }}</a
+        >.
+      </li>
+      <li>Base map, aerial imagery, national border and terrain heights: © swisstopo.</li>
+      <li>
+        Road routes: © openrouteservice.org by HeiGIT, map data © OpenStreetMap
+        contributors<template v-if="routeIndex"
+          >, computed on {{ formatDate(routeIndex.computedOn) }}</template
+        >.
+      </li>
+      <li>
+        Sites: Canton of Basel-Stadt open data, swisstopo, Viollier and Unilabs (see site list).
+      </li>
+      <li>
+        Corridor dimensions:
+        <a :href="SORA_ANNEX_A" class="underline">JARUS SORA 2.5 Annex A</a>, section A.5.2.
+      </li>
+    </ul>
   </section>
 </template>

@@ -10,7 +10,9 @@
     "scripts/**/*.ts",
     // Shared with the app: imported by the data scripts.
     "src/config/region.ts",
-    "src/types/zone.ts"
+    "src/types/zone.ts",
+    "src/data/sites.ts",
+    "src/data/routes.ts"
   ],
   "compilerOptions": {
     "module": "preserve",

@@ -6,9 +6,6 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  // GitHub Pages serves a project site under "/<repo>/". The deploy workflow passes that path
-  // as BASE_PATH (e.g. "/basilink", or "" with a custom domain). Locally the app runs at "/".
-  base: `${process.env.BASE_PATH ?? ''}/`,
   plugins: [vue(), tailwindcss()],
   resolve: {
     alias: {
@@ -16,8 +13,8 @@ export default defineConfig({
     },
   },
   build: {
-    // MapLibre GL alone is ~1 MB minified (~300 KB gzipped). That is expected for a WebGL map
-    // library, so the default 500 kB warning would only be noise.
-    chunkSizeWarningLimit: 1300,
+    // MapLibre GL is ~1 MB minified, proj4 and the Turf modules add ~0.2 MB (together ~390 KB
+    // gzipped). That is expected for a WebGL map app, so the default 500 kB warning is only noise.
+    chunkSizeWarningLimit: 1500,
   },
 })

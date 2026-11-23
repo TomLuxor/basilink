@@ -1,0 +1,55 @@
+# Re-computes the driving routes between all sites with OpenRouteService.
+# Needs the repository secret ORS_API_KEY. Runs monthly (road networks change slowly) and on demand.
+name: Update driving routes
+
+on:
+  schedule:
+    - cron: '0 3 1 * *' # 03:00 UTC on the first day of every month
+  workflow_dispatch:
+
+concurrency:
+  group: update-routes
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Compute routes
+        run: npm run data:routes
+        env:
+          ORS_API_KEY: ${{ secrets.ORS_API_KEY }}
+      - name: Commit if the routes changed
+        id: commit
+        run: |
+          if [ -z "$(git status --porcelain -- public/data/routes)" ]; then
+            echo "Routes unchanged."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/routes
+          git commit -m "data: update driving routes"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+      # On the Vercel Hobby plan, only commits by the account owner deploy on their own, so a commit
+      # by github-actions[bot] needs the deploy hook. It builds the latest commit on main (D21).
+      - name: Deploy on Vercel
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$VERCEL_DEPLOY_HOOK_URL" ]; then
+            echo "::warning::Secret VERCEL_DEPLOY_HOOK_URL is missing. The new routes go live with the next deployment."
+            exit 0
+          fi
+          curl --fail --silent --show-error --request POST "$VERCEL_DEPLOY_HOOK_URL"

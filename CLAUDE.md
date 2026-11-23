@@ -28,28 +28,32 @@ estimated flight time with driving time on the road.
 ## Current status
 
 - Phase 0 (spike) is done; see `docs/phase-0-spike.md`.
-- Phase 1 (setup) is done on branch `phase-1-setup`.
-- **Waiting for the owner's OK before Phase 2.**
-- Hosting is **GitHub Pages** without a custom domain for now (D15). There is no Vercel and no
-  server code.
+- Phase 1 (setup) is merged into `main` (repo: github.com/TomLuxor/basilink).
+- Phase 2 (MVP features 1–7) is done on branch `phase-2-mvp`. **Merging into `main` and starting
+  Phase 3 wait for the owner's OK.**
+- Hosting: Vercel Hobby, connected to the GitHub repo (D21). `main` is production, every other
+  branch gets a preview URL. No environment variables on Vercel.
+- The repo secrets `ORS_API_KEY` and `VERCEL_DEPLOY_HOOK_URL` are set (2026-11-23).
 - Open owner tasks:
-  - create an OpenRouteService API key (HeiGIT account)
-  - create a public GitHub repo and add the remote
-  - enable Pages with source "GitHub Actions"
-  - add the repo secret `ORS_API_KEY`
+  - regenerate the ORS key around 2026-11-30 (it was shown once in a session log), then update
+    `.env.local` and the repo secret
+  - after the first data commit by `github-actions[bot]`, check that the deploy hook made it live
   - confirm the ORS terms
+- `.env.local` holds `ORS_API_KEY=…`. Never print its content.
 
 ## Commands
 
-| Command                | Purpose                          |
-| ---------------------- | -------------------------------- |
-| `npm run dev`          | Start the dev server             |
-| `npm run build`        | Type check and build             |
-| `npm test`             | Run Vitest                       |
-| `npm run lint`         | ESLint                           |
-| `npm run format:check` | Prettier check                   |
-| `npm run typecheck`    | vue-tsc                          |
-| `npm run data:zones`   | Refresh `public/data/` from FOCA |
+| Command                | Purpose                                              |
+| ---------------------- | ---------------------------------------------------- |
+| `npm run dev`          | Start the dev server                                 |
+| `npm run build`        | Type check and build                                 |
+| `npm test`             | Run Vitest                                           |
+| `npm run lint`         | ESLint                                               |
+| `npm run format:check` | Prettier check                                       |
+| `npm run typecheck`    | vue-tsc                                              |
+| `npm run data:zones`   | Refresh `public/data/` from FOCA                     |
+| `npm run data:routes`  | Driving routes via ORS (`-- --missing` to fill gaps) |
+| `npm run data:border`  | Swiss border around Basel                            |
 
 On Windows, run Vitest from a terminal whose path starts with an upper-case drive letter (`D:\`).
 A lower-case `d:\` makes every test fail with "reading 'config'" (vitest#5251).
@@ -61,10 +65,10 @@ A lower-case `d:\` makes every test fail with "reading 'config'" (vitest#5251).
 - `src/config/region.ts` and `src/types/zone.ts` are shared with `scripts/`. Keep them free of browser APIs.
 - Tests live next to the code as `*.test.ts` and run in the Node environment.
 - `public/data/` is generated. Never edit it by hand.
-- The site is served under `/<repo>/` on GitHub Pages. Build URLs to own files from
-  `import.meta.env.BASE_URL`, never from `/`.
+- Build URLs to own files from `import.meta.env.BASE_URL`, never from `/`.
 - Secrets (e.g. `ORS_API_KEY`) are only used by scripts in GitHub Actions or from `.env.local`.
-  Never ship them to the browser.
+  Never ship them to the browser, and never give a secret the `VITE_` prefix (Vite inlines those
+  into the bundle).
 - Default parameters must follow regulation and the SORA 2.5 method (D17). Every number in the
   UI is labelled as an assumption and names its source.
 
