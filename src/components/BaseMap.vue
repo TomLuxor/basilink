@@ -74,8 +74,9 @@ onMounted(() => {
       fitBoundsOptions: { padding: 16 },
       maxBounds: MAP_MAX_BOUNDS,
       cooperativeGestures: narrowScreen.matches,
+      // Without `compact`, MapLibre shows the full line on wide maps and an expandable button on
+      // narrow ones, where the line would cover the scale bar.
       attributionControl: {
-        compact: false,
         customAttribution:
           'Zones © FOCA · Routes © openrouteservice.org by HeiGIT, OSM contributors',
       },
