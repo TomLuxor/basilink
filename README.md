@@ -57,7 +57,7 @@ leave Switzerland.
 5. The flight time (direct line at cruise speed) is compared with a pre-computed driving route.
 6. Switch the map to **3D** to see the corridor and the zones around it from the side, with
    heights drawn three times taller.
-7. **All pairs** rates all 136 site pairs at once as a traffic-light matrix: red needs an
+7. **Exemption overview** rates all 136 site pairs at once as a traffic-light matrix: red needs an
    exemption, amber leaves Switzerland, green has no zone conflict. A click opens the pair.
 
 All assumptions can be changed in the panel. Their sources are documented in

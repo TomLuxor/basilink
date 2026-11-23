@@ -86,7 +86,7 @@ const isInvalid = (key: keyof FlightParameters) => effective.value[key] !== para
       class="flex cursor-pointer list-none items-center gap-2 rounded-lg px-3 py-2 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-sky-600 [&::-webkit-details-marker]:hidden"
     >
       <SlidersHorizontal class="size-4 text-slate-600" />
-      <span class="font-semibold">Assumptions</span>
+      <span class="font-semibold">Drone assumptions</span>
       <span class="text-sm text-slate-600">
         {{ effective.cruiseSpeedKmh }} km/h · {{ effective.flightAltitudeM }} m
       </span>

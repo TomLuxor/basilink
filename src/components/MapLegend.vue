@@ -6,7 +6,7 @@ import {
   CORRIDOR_COLOURS,
   SITE_COLOURS,
   VERTICAL_EXAGGERATION,
-  ZONE_3D_CEILING_M,
+  ZONE_3D_HEADROOM_M,
 } from '@/map/overlays'
 
 const zonesVisible = defineModel<boolean>('zonesVisible', { required: true })
@@ -79,8 +79,8 @@ const corridorItems = [
         </li>
       </ul>
       <p class="border-t border-slate-200 pt-2 text-xs text-slate-600">
-        3D: heights ×{{ VERTICAL_EXAGGERATION }}. Zones around the corridor only; without an upper
-        limit they end at {{ ZONE_3D_CEILING_M }} m.
+        3D: heights ×{{ VERTICAL_EXAGGERATION }}. Zones around the corridor only, cut
+        {{ ZONE_3D_HEADROOM_M }} m above the checked volume.
       </p>
     </div>
   </details>
