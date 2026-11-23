@@ -114,7 +114,12 @@ const announcement = computed(() => {
         class="flex gap-2 rounded-lg bg-amber-50 p-3 text-sm text-amber-950 ring-1 ring-amber-200"
       >
         <TriangleAlert class="mt-0.5 size-4 shrink-0 text-amber-700" />
-        <span>Leaves Switzerland. Zones in Germany and France are not checked.</span>
+        <span>
+          Leaves Switzerland (dark on the map). Zones there are not checked, and that part also
+          needs approval from the
+          <abbr title="Luftfahrt-Bundesamt">LBA</abbr> (Germany) or the
+          <abbr title="Direction générale de l'Aviation civile">DGAC</abbr> (France).
+        </span>
       </p>
       <p
         v-if="analysis.needsTerrain"

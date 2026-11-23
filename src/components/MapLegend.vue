@@ -10,6 +10,7 @@ const corridorItems = [
   { label: 'Flight line', colour: CORRIDOR_COLOURS.line, shape: 'line' },
   { label: 'Checked volume', colour: CORRIDOR_COLOURS.operationalVolume, shape: 'area' },
   { label: 'Ground risk buffer', colour: CORRIDOR_COLOURS.groundRiskBuffer, shape: 'dashed' },
+  { label: 'Outside Switzerland', colour: CORRIDOR_COLOURS.abroad, shape: 'area' },
   { label: 'Road route', colour: CORRIDOR_COLOURS.route, shape: 'line' },
   { label: 'Zone in conflict', colour: '#0f172a', shape: 'thick' },
   { label: 'Zone passed below', colour: '#0f172a', shape: 'dashed' },
