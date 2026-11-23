@@ -1,6 +1,8 @@
-// TSConfig for code that runs in Node.js: tool configs and the data scripts in scripts/.
+// TSConfig for code that runs in Node.js: tool configs, the data scripts in scripts/ and the
+// Vercel Function in api/.
 // The data scripts are executed with Node's built-in type stripping (no build step),
 // so they must only use erasable TypeScript syntax and import local files with `.ts`.
+// Vercel compiles api/ itself; there, local imports end in `.js` (see src/server/driveTimes.ts).
 {
   "extends": "@tsconfig/node24/tsconfig.json",
   "include": [
@@ -8,11 +10,14 @@
     "vitest.config.*",
     "eslint.config.*",
     "scripts/**/*.ts",
-    // Shared with the app: imported by the data scripts.
+    "api/**/*.ts",
+    // Shared with the app: imported by the data scripts or the function.
     "src/config/region.ts",
     "src/types/zone.ts",
     "src/data/sites.ts",
-    "src/data/routes.ts"
+    "src/data/routes.ts",
+    "src/data/driveTimes.ts",
+    "src/server/driveTimes.ts"
   ],
   "compilerOptions": {
     "module": "preserve",
