@@ -9,6 +9,7 @@ import MapLegend from '@/components/MapLegend.vue'
 import PairSelect from '@/components/PairSelect.vue'
 import ResultPanel from '@/components/ResultPanel.vue'
 import SiteList from '@/components/SiteList.vue'
+import View3dToggle from '@/components/View3dToggle.vue'
 import { useCorridorCheck } from '@/composables/useCorridorCheck'
 import type { BasemapId } from '@/config/basemaps'
 
@@ -16,6 +17,7 @@ const check = useCorridorCheck()
 const { parameters } = check
 const basemap = ref<BasemapId>('light')
 const zonesVisible = ref(true)
+const view3d = ref(false)
 </script>
 
 <template>
@@ -67,10 +69,14 @@ const zonesVisible = ref(true)
         :to-id="check.toId.value"
         :analysis="check.analysis.value"
         :route="check.routeGeometry.value"
+        :view3d="view3d"
         @select-site="check.selectFromMap"
       />
       <div class="absolute top-3 left-3 flex flex-col items-start gap-2">
-        <BasemapSwitcher v-model="basemap" />
+        <div class="flex gap-2">
+          <BasemapSwitcher v-model="basemap" />
+          <View3dToggle v-model="view3d" />
+        </div>
         <MapLegend v-model:zones-visible="zonesVisible" />
       </div>
     </section>

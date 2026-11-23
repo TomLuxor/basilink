@@ -23,6 +23,7 @@ describe('computeVolumes', () => {
   it('gives the documented defaults (docs/decisions.md, D17)', () => {
     const volumes = computeVolumes(DEFAULT_FLIGHT_PARAMETERS)
     expect(volumes.speedMs).toBeCloseTo(20, 6)
+    expect(volumes.flightGeographyTopM).toBe(80)
     expect(volumes.contingencyHorizontalM).toBeCloseTo(47.4, 1)
     expect(volumes.contingencyTopM).toBeCloseTo(115.4, 1)
     expect(volumes.groundRiskBufferM).toBeCloseTo(116.1, 1)

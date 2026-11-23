@@ -37,6 +37,8 @@ export interface FlightVolumes {
   flightGeographyWidthM: number
   /** S_CV: horizontal extent of the contingency volume, incl. the extra margin S_Add. */
   contingencyHorizontalM: number
+  /** H_FG: top of the flight geography above ground, i.e. the planned flight height. */
+  flightGeographyTopM: number
   /** H_CV: top of the contingency volume above ground, incl. the extra margin H_Add. */
   contingencyTopM: number
   /** S_GRB: ground risk buffer beyond the contingency volume (1:1 rule). */
@@ -76,6 +78,7 @@ export function computeVolumes(parameters: FlightParameters): FlightVolumes {
   return {
     speedMs: v0,
     flightGeographyWidthM,
+    flightGeographyTopM: parameters.flightAltitudeM,
     contingencyHorizontalM,
     contingencyTopM,
     groundRiskBufferM: contingencyTopM + cd / 2,

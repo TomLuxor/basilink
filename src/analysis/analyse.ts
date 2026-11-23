@@ -12,6 +12,7 @@
 import booleanIntersects from '@turf/boolean-intersects'
 import booleanWithin from '@turf/boolean-within'
 import difference from '@turf/difference'
+import intersect from '@turf/intersect'
 import type { MultiPolygon, Polygon, Position } from 'geojson'
 import type { FlightParameters } from '@/config/flight'
 import { ZONE_CATEGORY_ORDER } from '@/config/zoneCategories'
@@ -91,6 +92,11 @@ export interface CorridorAnalysis {
   leavesSwitzerland: boolean | null
   /** That part of the operational volume, in WGS84 for the map; null if there is none. */
   abroad: Polygon | MultiPolygon | null
+  /**
+   * For the 3D view: every zone in the operational volume, cut to the ground risk area, in WGS84.
+   * Cutting keeps the 3D view on the corridor; some zones cover most of the region.
+   */
+  zoneSlices: { zone: ZoneProperties; geometry: Polygon | MultiPolygon }[]
   /** true if a zone with AMSL limits was assumed to conflict because terrain is unknown. */
   needsTerrain: boolean
 }
@@ -126,14 +132,19 @@ export function prepareArea(geometry: Polygon | MultiPolygon): Polygon[] {
 
 // --- Analysis ---
 
+const collection = (geometries: Polygon[]) => ({
+  type: 'FeatureCollection' as const,
+  features: geometries.map((geometry) => ({ type: 'Feature' as const, properties: {}, geometry })),
+})
+
 /** The part of `area` outside all `parts` (everything in LV95), or null if nothing is left. */
 function outside(area: Polygon, parts: Polygon[]): Polygon | MultiPolygon | null {
-  const features = [area, ...parts].map((geometry) => ({
-    type: 'Feature' as const,
-    properties: {},
-    geometry,
-  }))
-  return difference({ type: 'FeatureCollection', features })?.geometry ?? null
+  return difference(collection([area, ...parts]))?.geometry ?? null
+}
+
+/** The part of `area` inside `other` (both in LV95), or null if they do not overlap. */
+function inside(area: Polygon, other: Polygon): Polygon | MultiPolygon | null {
+  return intersect(collection([area, other]))?.geometry ?? null
 }
 
 function geometryToWgs84(geometry: Polygon | MultiPolygon): Polygon | MultiPolygon {
@@ -196,6 +207,7 @@ export function analyseCorridor(input: AnalysisInput): CorridorAnalysis {
   const groundRiskBounds = boundsOf(groundRiskRing)
 
   const findings: ZoneFinding[] = []
+  const zoneSlices: CorridorAnalysis['zoneSlices'] = []
   let needsTerrain = false
 
   for (const zone of input.zones) {
@@ -211,6 +223,8 @@ export function analyseCorridor(input: AnalysisInput): CorridorAnalysis {
       const relation =
         vertical === 'below' ? 'passes-below' : vertical === 'above' ? 'passes-above' : 'conflict'
       findings.push({ zone: zone.properties, relation })
+      const slice = inside(zone.geometry, groundRisk)
+      if (slice) zoneSlices.push({ zone: zone.properties, geometry: geometryToWgs84(slice) })
     } else if (booleanIntersects(groundRisk, zone.geometry)) {
       findings.push({ zone: zone.properties, relation: 'ground-risk-buffer' })
     }
@@ -245,6 +259,7 @@ export function analyseCorridor(input: AnalysisInput): CorridorAnalysis {
     authorities: collectAuthorities(findings),
     leavesSwitzerland,
     abroad: abroad && geometryToWgs84(abroad),
+    zoneSlices,
     needsTerrain,
   }
 }

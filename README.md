@@ -12,9 +12,9 @@ Aviation (FOCA/BAZL). It also compares the estimated flight time with the drivin
 
 ![Basilink on a desktop screen: the panel on the left says "Exemption needed" for the corridor from University Hospital Basel to the Viollier laboratory, with drone and road times; the map on the right shows the corridor, the road route and the restriction zones.](docs/screenshots/desktop.webp)
 
-Status: the MVP is complete and deployed. The stretch goals are not built yet: a 3D view, a
-traffic-light matrix of all pairs and traffic-dependent driving times. Zones in Germany and France
-were dropped in favour of showing the part of a corridor abroad (D26).
+Status: the MVP and the 3D view (D27) are complete and deployed. Still open: a traffic-light
+matrix of all pairs and traffic-dependent driving times. Zones in Germany and France were dropped
+in favour of showing the part of a corridor abroad (D26).
 
 ## Why Basel?
 
@@ -54,6 +54,8 @@ leave Switzerland.
    the part abroad and the warning names the authorities there.
 
 5. The flight time (direct line at cruise speed) is compared with a pre-computed driving route.
+6. Switch the map to **3D** to see the corridor and the zones around it from the side, with
+   heights drawn three times taller.
 
 All assumptions can be changed in the panel. Their sources are documented in
 [docs/decisions.md](docs/decisions.md) (D17, D18).

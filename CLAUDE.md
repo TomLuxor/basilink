@@ -33,7 +33,7 @@ estimated flight time with driving time on the road.
 - Phase 3 (accessibility, responsive layout, tests, docs) is merged into `main`.
 - UI cleanup (D25: visuals over prose, details on demand) is merged into `main`.
 - Production: https://basilink.vercel.app
-- Next, only on the owner's request: stretch goals (3D view, traffic-light matrix of all pairs,
+- Next, only on the owner's request: stretch goals (traffic-light matrix of all pairs,
   traffic-dependent driving times) and a test with real screen readers. DE/FR zones are dropped
   (D26).
 - Hosting: Vercel Hobby, connected to the GitHub repo (D21). `main` is production, every other
