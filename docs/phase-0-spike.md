@@ -1,21 +1,21 @@
 # Phase 0 – Technical spike
 
 Date: 2026-11-23. All findings below were verified with live requests on that date unless marked
-*(unverified)*. No application code was written in this phase.
+_(unverified)_. No application code was written in this phase.
 
 ## TL;DR
 
-| Topic | Status | Key point |
-| --- | --- | --- |
-| BAZL UAS zones | ✅ works | Static download via STAC, Opendata BY. Format is **ED-269 v1.0**, not ED-318. Data is **clipped at the Swiss border**. |
-| Vertical limits | ✅ clear | Metres; Basel zones are all **AGL**. AMSL only occurs in Geneva. `99999` = unlimited. |
-| Height API | ✅ works | **LV95/LV03 only**, no WGS84. Covers some km beyond the border. Not needed for current Basel zones. |
-| swisstopo vector basemap | ⚠️ works with a gap | MapLibre style JSON, CORS open. **Blank beyond the border from zoom ~10.** Aerial imagery covers the EuroAirport. |
-| Routing (ORS) | ✅ feasible | Free key, ~2,000 directions/day. Needs server-side proxy. |
-| Traffic-aware routing | 🔍 options | Mapbox (100k/month free), TomTom (~2,500/day free), Google (5k/month free, **not allowed on non-Google maps**). |
-| DE drone zones | ✅ data exists | dipul WFS/WMS, GeoJSON output, but **CC BY-ND 4.0** (no derivatives) and limits in **ft MSL**. |
-| FR drone zones | ⚠️ raster only | Géoportail WMS (open category). SIA has an ED-269 dataset, download path unverified. |
-| Hospitals | ✅ better than expected | Basel-Stadt publishes hospitals as GeoJSON points (Opendata BY). BAG data has no coordinates and is BY-ASK. |
+| Topic                    | Status                  | Key point                                                                                                              |
+| ------------------------ | ----------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| BAZL UAS zones           | ✅ works                | Static download via STAC, Opendata BY. Format is **ED-269 v1.0**, not ED-318. Data is **clipped at the Swiss border**. |
+| Vertical limits          | ✅ clear                | Metres; Basel zones are all **AGL**. AMSL only occurs in Geneva. `99999` = unlimited.                                  |
+| Height API               | ✅ works                | **LV95/LV03 only**, no WGS84. Covers some km beyond the border. Not needed for current Basel zones.                    |
+| swisstopo vector basemap | ⚠️ works with a gap     | MapLibre style JSON, CORS open. **Blank beyond the border from zoom ~10.** Aerial imagery covers the EuroAirport.      |
+| Routing (ORS)            | ✅ feasible             | Free key, ~2,000 directions/day. Needs server-side proxy.                                                              |
+| Traffic-aware routing    | 🔍 options              | Mapbox (100k/month free), TomTom (~2,500/day free), Google (5k/month free, **not allowed on non-Google maps**).        |
+| DE drone zones           | ✅ data exists          | dipul WFS/WMS, GeoJSON output, but **CC BY-ND 4.0** (no derivatives) and limits in **ft MSL**.                         |
+| FR drone zones           | ⚠️ raster only          | Géoportail WMS (open category). SIA has an ED-269 dataset, download path unverified.                                   |
+| Hospitals                | ✅ better than expected | Basel-Stadt publishes hospitals as GeoJSON points (Opendata BY). BAG data has no coordinates and is BY-ASK.            |
 
 **Domain insight for the demo:** 8 of 13 Basel-Stadt hospitals lie inside zone `LFSB001` (EuroAirport
 aerodrome zone, drones > 250 g prohibited at any height). All 13 lie inside `CTR0016` (CTR BALE,
@@ -62,13 +62,13 @@ answer to "who do I ask?" is a French authority. That is a realistic and explain
 
 ### Vertical limits
 
-| Lower–upper | Ref | Count (CH) |
-| --- | --- | --- |
-| 0 – 99999 m | AGL/AGL | 899 |
-| 0 – 99999 m | AGL/AMSL | 138 volumes (70 zones, all Geneva) |
-| 0 – 200 / 150 / 120 / 300 / 2000 m | AGL/AGL | 304 |
-| 120 – 99999 m | AGL/AGL | 18 (CTRs) |
-| 60 – 99999 m | AGL/AGL | 1 |
+| Lower–upper                        | Ref      | Count (CH)                         |
+| ---------------------------------- | -------- | ---------------------------------- |
+| 0 – 99999 m                        | AGL/AGL  | 899                                |
+| 0 – 99999 m                        | AGL/AMSL | 138 volumes (70 zones, all Geneva) |
+| 0 – 200 / 150 / 120 / 300 / 2000 m | AGL/AGL  | 304                                |
+| 120 – 99999 m                      | AGL/AGL  | 18 (CTRs)                          |
+| 60 – 99999 m                       | AGL/AGL  | 1                                  |
 
 - `uomDimensions` is always `M`. `99999` is a sentinel for "unlimited".
 - **Basel region: all limits are AGL.** The flight altitude parameter (AGL) can therefore be compared
@@ -138,7 +138,7 @@ STAC lists `license: proprietary`, but links to the opendata.swiss BY terms, and
 Verified style URLs (HTTP 200, CORS `*`, style spec v8):
 
 - `https://vectortiles.geo.admin.ch/styles/ch.swisstopo.lightbasemap.vt/style.json` (light; recommended for overlays)
-- `https://vectortiles.geo.admin.ch/styles/ch.swisstopo.basemap.vt/style.json` (colour; uses a sprite *array*, which MapLibre ≥ 3 supports)
+- `https://vectortiles.geo.admin.ch/styles/ch.swisstopo.basemap.vt/style.json` (colour; uses a sprite _array_, which MapLibre ≥ 3 supports)
 - `https://vectortiles.geo.admin.ch/styles/ch.swisstopo.imagerybasemap.vt/style.json` (SWISSIMAGE + vector labels)
 - `ch.swisstopo.leichte-basiskarte.vt` also resolves. `lightbasemap-winter` returns 404.
 
@@ -147,12 +147,12 @@ Sources are `ch.swisstopo.base.vt` and `ch.swisstopo.relief.vt` (v1.0.0, zoom 0�
 
 **Gap beyond the border.** Tile content per zoom level:
 
-| Zoom | Alsace (FR) | EuroAirport | Basel (CH) |
-| --- | --- | --- | --- |
-| ≤ 9 | roads, water, places | — | full |
-| 10 | empty | coarse | full |
-| 12 | empty | 1 road layer | full |
-| 14 | empty (admin layer only) | empty | full (~250 KB) |
+| Zoom | Alsace (FR)              | EuroAirport  | Basel (CH)     |
+| ---- | ------------------------ | ------------ | -------------- |
+| ≤ 9  | roads, water, places     | —            | full           |
+| 10   | empty                    | coarse       | full           |
+| 12   | empty                    | 1 road layer | full           |
+| 14   | empty (admin layer only) | empty        | full (~250 KB) |
 
 At street zoom the EuroAirport, Saint-Louis and Weil am Rhein render as blank background.
 **SWISSIMAGE does cover them** (visually checked: the EuroAirport terminal is visible). Options:
@@ -178,17 +178,17 @@ acceptable for AGL volumes in Basel.
 - CORS is open, but the key must not ship to the browser, so it goes behind a Vercel Function proxy.
 - Design idea: the proxy accepts only **location IDs from the curated list**, not arbitrary
   coordinates. That makes it abuse-resistant and cacheable, because the number of pairs is small and fixed.
-- Attribution: openrouteservice / HeiGIT and © OpenStreetMap contributors *(exact wording to confirm)*.
+- Attribution: openrouteservice / HeiGIT and © OpenStreetMap contributors _(exact wording to confirm)_.
 - ORS durations come from speed profiles and do **not** account for traffic.
 
 ### Traffic-aware alternatives (for the adapter layer later)
 
-| Provider | Free tier | Paid | Display constraint |
-| --- | --- | --- | --- |
-| Mapbox Directions `driving-traffic` | 100,000 req/month (verified on mapbox.com/pricing) | $2.00 / 1,000 | *Unverified*. Check the Product Terms for map-pairing rules. |
-| TomTom Routing | ~2,500 non-tile req/day (TomTom store page; sources partly conflict) | pay-as-you-grow | *Unverified* |
-| Google Routes API (Pro = traffic-aware) | 5,000/month | $10 / 1,000 | **Results shown on a map must be on a Google Map.** Excluded with a swisstopo basemap. |
-| HERE | not checked | — | — |
+| Provider                                | Free tier                                                            | Paid            | Display constraint                                                                     |
+| --------------------------------------- | -------------------------------------------------------------------- | --------------- | -------------------------------------------------------------------------------------- |
+| Mapbox Directions `driving-traffic`     | 100,000 req/month (verified on mapbox.com/pricing)                   | $2.00 / 1,000   | _Unverified_. Check the Product Terms for map-pairing rules.                           |
+| TomTom Routing                          | ~2,500 non-tile req/day (TomTom store page; sources partly conflict) | pay-as-you-grow | _Unverified_                                                                           |
+| Google Routes API (Pro = traffic-aware) | 5,000/month                                                          | $10 / 1,000     | **Results shown on a map must be on a Google Map.** Excluded with a swisstopo basemap. |
+| HERE                                    | not checked                                                          | —               | —                                                                                      |
 
 Recommendation: start with ORS. Keep a `RoutingProvider` interface (`getRoute(from, to, departAt?)`)
 so that Mapbox or TomTom can be added for the "rush hour vs. night" stretch goal.
@@ -207,7 +207,7 @@ so that Mapbox or TomTom can be added for the "rush hour vs. night" stretch goal
   - 3 hospitals, 12 nature reserves, 14 residential zones
 - License: **CC BY-ND 4.0** ("keine Bearbeitungen"), attribution "dipul, CC-BY-ND 4.0". Clipping or
   simplifying the data and redistributing it as a static file is likely not allowed. Live WMS display
-  or live WFS queries of unmodified data are the safer route *(not legal advice)*.
+  or live WFS queries of unmodified data are the safer route _(not legal advice)_.
 - The vertical model differs from Switzerland: ft MSL for CTRs, m AGL elsewhere.
 
 ### France: DGAC / SIA / Géoplateforme
@@ -233,24 +233,24 @@ so that Mapbox or TomTom can be added for the "rush hour vs. night" stretch goal
 
 ## 7. Recommended stack
 
-| Area | Choice | Why |
-| --- | --- | --- |
-| Language/build | TypeScript strict, Vite, ESLint (flat config) + Prettier | As proposed; standard and fast. |
-| UI framework | Vue 3, `<script setup>` | Readable single-file components, easy to explain. No reason to deviate. |
-| Map | **MapLibre GL JS** | swisstopo ships MapLibre-ready styles (verified). WebGL vector rendering. `fill-extrusion` covers the 3D stretch goal. OpenLayers would handle LV95 natively, but the look is less modern and that is not needed. Cesium only if a true terrain-3D stretch is wanted, because it is heavy. |
-| Geometry | **proj4 + small Turf modules** (`@turf/intersect`, `@turf/boolean-intersects`) | The height/profile API is LV95-only, so proj4 is required anyway. Analysis runs in LV95 metres: the corridor is a line plus a buffer, built as a simple "stadium" polygon in metres that is easy to whiteboard. Turf does the planar polygon ops. Display stays WGS84. |
-| Styling | Tailwind CSS | Fast and consistent. Accessible controls use **native HTML** (radio groups, buttons, `<select>`) instead of a component library. |
-| Data pipeline | Node script (TypeScript) in `scripts/` | STAC → ED-269 JSON → Basel bbox → one feature per volume → simplify/round → `public/data/zones-basel.geojson` + `meta.json`. |
-| Data refresh | GitHub Action, daily, commit on change | Git history shows data changes. Vercel redeploys on push. More transparent than Vercel Cron. |
-| Routing | ORS behind a Vercel Function | Key stays server-side, location-ID allowlist, provider adapter. |
-| Tests/CI | Vitest; GitHub Actions: lint, typecheck (`vue-tsc`), test, build | As proposed. |
-| Hosting | Vercel Hobby | Personal and non-commercial use fits *(Vercel terms not re-verified)*. |
+| Area           | Choice                                                                         | Why                                                                                                                                                                                                                                                                                        |
+| -------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Language/build | TypeScript strict, Vite, ESLint (flat config) + Prettier                       | As proposed; standard and fast.                                                                                                                                                                                                                                                            |
+| UI framework   | Vue 3, `<script setup>`                                                        | Readable single-file components, easy to explain. No reason to deviate.                                                                                                                                                                                                                    |
+| Map            | **MapLibre GL JS**                                                             | swisstopo ships MapLibre-ready styles (verified). WebGL vector rendering. `fill-extrusion` covers the 3D stretch goal. OpenLayers would handle LV95 natively, but the look is less modern and that is not needed. Cesium only if a true terrain-3D stretch is wanted, because it is heavy. |
+| Geometry       | **proj4 + small Turf modules** (`@turf/intersect`, `@turf/boolean-intersects`) | The height/profile API is LV95-only, so proj4 is required anyway. Analysis runs in LV95 metres: the corridor is a line plus a buffer, built as a simple "stadium" polygon in metres that is easy to whiteboard. Turf does the planar polygon ops. Display stays WGS84.                     |
+| Styling        | Tailwind CSS                                                                   | Fast and consistent. Accessible controls use **native HTML** (radio groups, buttons, `<select>`) instead of a component library.                                                                                                                                                           |
+| Data pipeline  | Node script (TypeScript) in `scripts/`                                         | STAC → ED-269 JSON → Basel bbox → one feature per volume → simplify/round → `public/data/zones-basel.geojson` + `meta.json`.                                                                                                                                                               |
+| Data refresh   | GitHub Action, daily, commit on change                                         | Git history shows data changes. Vercel redeploys on push. More transparent than Vercel Cron.                                                                                                                                                                                               |
+| Routing        | ORS behind a Vercel Function                                                   | Key stays server-side, location-ID allowlist, provider adapter.                                                                                                                                                                                                                            |
+| Tests/CI       | Vitest; GitHub Actions: lint, typecheck (`vue-tsc`), test, build               | As proposed.                                                                                                                                                                                                                                                                               |
+| Hosting        | Vercel Hobby                                                                   | Personal and non-commercial use fits _(Vercel terms not re-verified)_.                                                                                                                                                                                                                     |
 
 ## 8. Risks
 
 1. **Border clipping.** Swiss zones stop at the border, so corridors into FR/DE are under-reported.
    Mitigation: detect when a corridor leaves Switzerland and warn. This needs a Swiss boundary polygon
-   (swissBOUNDARIES3D, *availability to verify in Phase 1*).
+   (swissBOUNDARIES3D, _availability to verify in Phase 1_).
 2. **Blank basemap abroad at street zoom.** Mitigation: imagery toggle now, OSM underlay later.
 3. **Almost every city pair is affected by LFSB001/CTR0016.** The traffic-light matrix would be
    mostly amber or red. Result categories must be meaningful: for example "no zone", "authorisation
