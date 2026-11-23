@@ -340,3 +340,17 @@ now fits on one screen.
 - **Icons:** [`@lucide/vue`](https://lucide.dev) (ISC licence), pinned to an exact version. Only
   the imported icons end up in the bundle (about 5 KB gzipped). Icons without a label are
   hidden from screen readers by the library.
+
+### D26 No zones from Germany and France; show the part abroad instead
+
+Replaces the stretch goal "DE/FR zones".
+
+- With the defaults and the zones of November 2026, 11 of 136 site pairs leave Switzerland. Most
+  involve the sites in Riehen or close to the northern and western border.
+- For these pairs, foreign zones are not the main issue. A FOCA authorisation covers Switzerland
+  only. Flying in another state also needs that state's confirmation (Art. 13 of Regulation (EU)
+  2019/947): in Germany the Luftfahrt-Bundesamt (LBA), in France the DGAC.
+- The data would be hard to use: the German zones (dipul) are licensed CC BY-ND 4.0, which forbids
+  clipped copies, and no verified official vector source with a clear licence was found for France.
+- Instead, the analysis returns the part of the operational volume outside Switzerland (Turf
+  `difference` in LV95). The map darkens that part, and the warning names LBA and DGAC.

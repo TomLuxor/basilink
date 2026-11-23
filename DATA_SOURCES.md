@@ -117,5 +117,7 @@ no coordinates and are licensed BY-ASK, so they are not used.
 - **German drone zones (dipul):** licensed CC BY-ND 4.0, which does not allow clipped or converted
   copies. Limits are in feet above sea level.
 - **French drone zones:** no verified official vector source and licence yet.
+- Instead of foreign zones, the app darkens the part of a corridor outside Switzerland and names
+  the authorities there (D26).
 - **DABS and NOTAM:** temporary restrictions are published daily and are not in the FOCA data set.
   The app's disclaimer says so.
