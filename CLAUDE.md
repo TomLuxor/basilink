@@ -29,9 +29,8 @@ estimated flight time with driving time on the road.
 
 - Phase 0 (spike) is done; see `docs/phase-0-spike.md`.
 - Phase 1 (setup) is merged into `main` (repo: github.com/TomLuxor/basilink).
-- Phase 2 (MVP features 1–7) is merged into `main`.
-- Phase 3 (accessibility, responsive layout, tests, docs, deploy) is in progress on branch
-  `phase-3-polish`.
+- Phase 2 (MVP features 1–7) is done on branch `phase-2-mvp`. **Merging into `main` and starting
+  Phase 3 wait for the owner's OK.**
 - Hosting: Vercel Hobby, connected to the GitHub repo (D21). `main` is production, every other
   branch gets a preview URL. No environment variables on Vercel.
 - Open owner tasks:
