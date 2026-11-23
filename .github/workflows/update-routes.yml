@@ -42,6 +42,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add public/data/routes
           git commit -m "data: update driving routes"
+          # Someone may have pushed to main while this job ran; put the data commit on top.
+          git pull --rebase
           git push
           echo "changed=true" >> "$GITHUB_OUTPUT"
       # On the Vercel Hobby plan, only commits by the account owner deploy on their own, so a commit
