@@ -47,7 +47,9 @@ estimated flight time with driving time on the road.
     `.env.local` and the repo secret
   - confirm the ORS terms
 - Open owner task: create the Mapbox token and set `MAPBOX_TOKEN` on Vercel (and in `.env.local`).
-- `.env.local` holds `ORS_API_KEY=…` and `MAPBOX_TOKEN=…`. Never print its content.
+- `.env.local` is optional and git-ignored. It holds local secrets such as `ORS_API_KEY=…` and
+  `MAPBOX_TOKEN=…`, only needed for `npm run data:routes` and for the traffic times in
+  `npm run dev`. Never print its content.
 
 ## Commands
 
