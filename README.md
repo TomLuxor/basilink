@@ -12,8 +12,8 @@ Aviation (FOCA/BAZL). It also compares the estimated flight time with the drivin
 
 ![Basilink on a desktop screen: the panel on the left says "Exemption needed" for the corridor from University Hospital Basel to the Viollier laboratory, with drone and road times; the map on the right shows the corridor, the road route and the restriction zones.](docs/screenshots/desktop.webp)
 
-Status: the MVP and the 3D view (D27) are complete and deployed. Still open: a traffic-light
-matrix of all pairs and traffic-dependent driving times. Zones in Germany and France were dropped
+Status: the MVP, the 3D view (D27) and the matrix of all pairs (D28) are complete and deployed.
+Still open: traffic-dependent driving times. Zones in Germany and France were dropped
 in favour of showing the part of a corridor abroad (D26).
 
 ## Why Basel?
@@ -43,8 +43,9 @@ leave Switzerland.
 2. Around the direct line, Basilink builds the **operational volume** that a drone could occupy.
    Its size follows the SORA 2.5 method used by FOCA. With the defaults it extends ±49.6 m around
    the line and up to 115.4 m above ground.
-3. The volume is intersected with the FOCA restriction zones. The calculation runs in the Swiss
-   grid LV95 (metres) and takes each zone's lower and upper limit into account.
+3. Basilink measures the distance from the flight line to every FOCA restriction zone. A zone
+   closer than the half width of the volume lies in the corridor; then its lower and upper limit
+   decide. The calculation runs in the Swiss grid LV95 (metres).
 4. The result lists every zone as one of:
    - **conflict**
    - **passes below**
@@ -56,6 +57,8 @@ leave Switzerland.
 5. The flight time (direct line at cruise speed) is compared with a pre-computed driving route.
 6. Switch the map to **3D** to see the corridor and the zones around it from the side, with
    heights drawn three times taller.
+7. **All pairs** rates all 136 site pairs at once as a traffic-light matrix: red needs an
+   exemption, amber leaves Switzerland, green has no zone conflict. A click opens the pair.
 
 All assumptions can be changed in the panel. Their sources are documented in
 [docs/decisions.md](docs/decisions.md) (D17, D18).
