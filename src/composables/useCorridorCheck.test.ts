@@ -96,6 +96,16 @@ describe('corridor check with the real data', () => {
     expect(check.analysis.value!.leavesSwitzerland).toBe(true)
   })
 
+  it('rates every pair for the matrix', async () => {
+    const check = await setup()
+    const lights = check.pairLights.value!
+    const index = (id: string) => check.sites.findIndex((site) => site.id === id)
+    // One light per pair below the diagonal.
+    expect(lights.map((row) => row.length)).toEqual(check.sites.map((_, i) => i))
+    expect(lights[index('viollier-allschwil')]![index('usb')]).toBe('red')
+    expect(lights[index('unilabs-basel')]![index('ksbl-bruderholz')]).toBe('green')
+  })
+
   it('falls back to the default for an invalid parameter', async () => {
     const check = await setup()
     check.parameters.value = { ...check.parameters.value, cruiseSpeedKmh: Number.NaN }

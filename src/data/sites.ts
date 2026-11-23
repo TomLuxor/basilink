@@ -12,6 +12,8 @@ export interface Site {
   /** Stable, URL-safe identifier, also used in route file names. */
   id: string
   name: string
+  /** Short label for compact views such as the pair matrix. */
+  shortName: string
   kind: SiteKind
   /** Type of facility as published by the source, translated to English. */
   category: string
@@ -39,6 +41,7 @@ export const SITES: Site[] = [
   {
     id: 'usb',
     name: 'University Hospital Basel (USB)',
+    shortName: 'USB',
     kind: 'hospital',
     category: 'Hospital, emergency department',
     address: 'Petersgraben 4, 4031 Basel',
@@ -48,6 +51,7 @@ export const SITES: Site[] = [
   {
     id: 'ukbb',
     name: "University Children's Hospital Basel (UKBB)",
+    shortName: 'UKBB',
     kind: 'hospital',
     category: 'Hospital, emergency department',
     address: 'Spitalstrasse 33, 4031 Basel',
@@ -57,6 +61,7 @@ export const SITES: Site[] = [
   {
     id: 'claraspital',
     name: 'St. Claraspital',
+    shortName: 'Claraspital',
     kind: 'hospital',
     category: 'Hospital, emergency department',
     address: 'Kleinriehenstrasse 30, 4058 Basel',
@@ -66,6 +71,7 @@ export const SITES: Site[] = [
   {
     id: 'bethesda',
     name: 'Bethesda Spital',
+    shortName: 'Bethesda',
     kind: 'hospital',
     category: 'Hospital',
     address: 'Gellertstrasse 144, 4020 Basel',
@@ -75,6 +81,7 @@ export const SITES: Site[] = [
   {
     id: 'merian-iselin',
     name: 'Merian Iselin Klinik',
+    shortName: 'Merian Iselin',
     kind: 'hospital',
     category: 'Hospital',
     address: 'Föhrenstrasse 2, 4009 Basel',
@@ -84,6 +91,7 @@ export const SITES: Site[] = [
   {
     id: 'schmerzklinik',
     name: 'Schmerzklinik Basel',
+    shortName: 'Schmerzklinik',
     kind: 'hospital',
     category: 'Private hospital',
     address: 'Hirschgässlein 11–13, 4051 Basel',
@@ -93,6 +101,7 @@ export const SITES: Site[] = [
   {
     id: 'felix-platter',
     name: 'Felix Platter',
+    shortName: 'Felix Platter',
     kind: 'hospital',
     category: 'Geriatric hospital',
     address: 'Burgfelderstrasse 101, 4055 Basel',
@@ -102,6 +111,7 @@ export const SITES: Site[] = [
   {
     id: 'adullam-basel',
     name: 'Adullam Basel',
+    shortName: 'Adullam Basel',
     kind: 'hospital',
     category: 'Geriatric hospital',
     address: 'Mittlere Strasse 15, 4056 Basel',
@@ -111,6 +121,7 @@ export const SITES: Site[] = [
   {
     id: 'adullam-riehen',
     name: 'Adullam Riehen',
+    shortName: 'Adullam Riehen',
     kind: 'hospital',
     category: 'Geriatric hospital',
     address: 'Schützengasse 60, 4125 Riehen',
@@ -120,6 +131,7 @@ export const SITES: Site[] = [
   {
     id: 'upk',
     name: 'University Psychiatric Clinics Basel (UPK)',
+    shortName: 'UPK',
     kind: 'hospital',
     category: 'Psychiatric hospital',
     address: 'Wilhelm Klein-Strasse 27, 4012 Basel',
@@ -129,6 +141,7 @@ export const SITES: Site[] = [
   {
     id: 'sonnhalde',
     name: 'Klinik Sonnhalde',
+    shortName: 'Sonnhalde',
     kind: 'hospital',
     category: 'Psychiatric hospital',
     address: 'Gänshaldenweg 28, 4125 Riehen',
@@ -138,6 +151,7 @@ export const SITES: Site[] = [
   {
     id: 'rehab-basel',
     name: 'Rehab Basel',
+    shortName: 'Rehab Basel',
     kind: 'hospital',
     category: 'Rehabilitation clinic',
     address: 'Im Burgfelderhof 40, 4012 Basel',
@@ -147,6 +161,7 @@ export const SITES: Site[] = [
   {
     id: 'matthea',
     name: 'Geburtshaus Matthea',
+    shortName: 'Matthea',
     kind: 'hospital',
     category: 'Birth centre',
     address: 'Klybeckstrasse 64/70, 4057 Basel',
@@ -158,6 +173,7 @@ export const SITES: Site[] = [
   {
     id: 'ksbl-bruderholz',
     name: 'Cantonal Hospital Baselland, Bruderholz',
+    shortName: 'KSBL Bruderholz',
     kind: 'hospital',
     category: 'Hospital, emergency department',
     address: 'Bruderholz, 4101 Bruderholz (Binningen)',
@@ -167,6 +183,7 @@ export const SITES: Site[] = [
   {
     id: 'ksbl-liestal',
     name: 'Cantonal Hospital Baselland, Liestal',
+    shortName: 'KSBL Liestal',
     kind: 'hospital',
     category: 'Hospital, emergency department',
     address: 'Rheinstrasse 26, 4410 Liestal',
@@ -178,6 +195,7 @@ export const SITES: Site[] = [
   {
     id: 'viollier-allschwil',
     name: 'Viollier AG, laboratory centre',
+    shortName: 'Viollier',
     kind: 'lab',
     category: 'Medical laboratory (staffed 24/7)',
     address: 'Hagmattstrasse 14, 4123 Allschwil',
@@ -187,6 +205,7 @@ export const SITES: Site[] = [
   {
     id: 'unilabs-basel',
     name: 'Unilabs Basel',
+    shortName: 'Unilabs',
     kind: 'lab',
     category: 'Cytology and pathology laboratory',
     address: 'Aeschenvorstadt 57, 4051 Basel',
